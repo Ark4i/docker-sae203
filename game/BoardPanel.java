@@ -20,7 +20,7 @@ public class BoardPanel extends JPanel {
         board = new Piece[8][8];
         initializeBoard();
         try {
-            crownImage = ImageIO.read(new File("../res/crown.png"));
+            crownImage = ImageIO.read(new File("./crown.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
