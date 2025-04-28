@@ -13,8 +13,11 @@ public class Morpion implements MouseListener
     private char[][] plateau;
     private char     joueur;
 
+    private boolean bAJoue;
+
     public Morpion()
     {
+        this.bChange = false;
         this.plateau = new char[3][3];
         for ( int cptLig = 0; cptLig< this.plateau.length; cptLig++ )
             for ( int cptCol = 0; cptCol < this.plateau[cptLig].length; cptCol++ )
@@ -69,6 +72,24 @@ public class Morpion implements MouseListener
         this.changerJoueur();
     }
 
+    public void setAJoue(boolean bool)
+    {
+        this.bAJoue = b;
+    }
+
+    public boolean getAJoue()
+    {
+        return this.bAJoue;
+    }
+
+    public char getJoueur()
+    {
+        return this.joueur;
+    }
+
+
+
+
 	public void mouseEntered (MouseEvent e){}
 	public void mouseExited  (MouseEvent e){}
     public void mousePressed (MouseEvent e){}
@@ -85,7 +106,7 @@ public class Morpion implements MouseListener
         return true;
     }
 
-    private boolean gagner()
+    public boolean aGagner()
     {
         /*Horizontal */
         for ( int cpt = 0; cpt < this.plateau.length; cpt++ )
