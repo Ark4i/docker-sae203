@@ -1,7 +1,7 @@
 
 import javax.swing.*;
 
-public class Main {
+public class Controleur {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             GameFrame frame = new GameFrame();

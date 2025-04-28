@@ -1,7 +1,7 @@
 import java.io.*;
 import java.net.*;
 
-public class ClientPuissance4 {
+public class ClientDames {
 	private static final int PORT = 5000;
 
 	public static void main(String[] args) {
@@ -15,7 +15,7 @@ public class ClientPuissance4 {
 			System.out.println("Connecté au serveur Puissance 4.");
 
 			int coupAutre;
-			Controleur ctrl = new Controleur();
+			Main ctrl = new Main();
 			if (in.readLine().equals("j1"))
 			{
 				System.out.println("j1");

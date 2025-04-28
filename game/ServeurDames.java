@@ -1,7 +1,7 @@
 import java.io.*;
 import java.net.*;
 
-public class ServeurPuissance4 {
+public class ServeurDames {
 	public static void main(String[] args) {
 		final int PORT = 5000;
 
