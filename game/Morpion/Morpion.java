@@ -41,10 +41,7 @@ public class Morpion implements MouseListener
         this.framePrc.add( this.panelPrc );
 
         this.panelPrc.setLayout( new GridLayout(3,3, 10, 10) );
-        for ( int cptLig = 0; cptLig< this.tabLabel.length; cptLig++ )
-            for ( int cptCol = 0; cptCol < this.tabLabel[cptLig].length; cptCol++ )
-                
-
+        
         this.framePrc.setVisible(true);
         this.framePrc.pack();
 
@@ -54,13 +51,15 @@ public class Morpion implements MouseListener
 	{
 		for ( int cptLig = 0; cptLig< this.tabLabel.length; cptLig++ )
             for ( int cptCol = 0; cptCol < this.tabLabel[cptLig].length; cptCol++ )
-                if ( e.getSource() == this.tabLabel[cptLig][cptCol] )
+                if ( e.getSource() == this.tabLabel[cptLig][cptCol] && this.plateau[cptLig][cptCol] == ' ' )
                 {
                     this.tabLabel[cptLig][cptCol].setIcon( new ImageIcon( "./images/" + this.joueur + ".png" ) );
                     this.plateau[cptLig][cptCol] = this.joueur;
+                    this.changerJoueur();
+                    System.out.println("aaa");
                 }
         
-        if ( this.finDujeu() )
+        if ( this.gagner() | this.finDujeu() )
         {
             this.framePrc.setVisible(false);
             this.framePrc = new JFrame();
@@ -68,8 +67,6 @@ public class Morpion implements MouseListener
             this.framePrc.setSize(100, 100);
             this.framePrc.setVisible(true);
         }
-
-        this.changerJoueur();
     }
 
     public void setAJoue(boolean bool)
@@ -96,9 +93,7 @@ public class Morpion implements MouseListener
 	public void mouseReleased(MouseEvent e){}
 
     private boolean finDujeu()
-    {
-        if ( this.gagner() )
-        
+    {   
         for ( int cptLig = 0; cptLig< this.plateau.length; cptLig++ )
             for ( int cptCol = 0; cptCol < this.plateau[cptLig].length; cptCol++ )
                 if ( this.plateau[cptLig][cptCol] == ' ' ) return false;
