@@ -6,9 +6,14 @@ import java.awt.event.*;
 public class Morpion implements MouseListener
 {
     private JFrame     frame;
-    private JPanel     panel;
+    private JPanel     panelMorpion;
     private JLabel[][] tabLabel;
     private char  [][] plateau;
+    private JPanel     panelChat;
+    private JPanel     panelSend;
+    private JTextField txtChat;
+    private JTextArea  logChat;
+    private JButton    btnChat;
     private boolean    monTour;
     private boolean    aJoue;
     private int        dernierMouvement;
@@ -24,8 +29,8 @@ public class Morpion implements MouseListener
         this.monTour          = false;
 
         this.frame = new JFrame("Morpion Multijoueur");
-        this.panel = new JPanel(new GridLayout(3, 3, 10, 10));
-        this.panel.setBackground(Color.BLACK);
+        this.panelMorpion = new JPanel(new GridLayout(3, 3, 10, 10));
+        this.panelMorpion.setBackground(Color.BLACK);
 
         for (int i = 0; i < 3; i++)
         {
@@ -34,11 +39,28 @@ public class Morpion implements MouseListener
                 this.plateau [i][j] = ' ';
                 this.tabLabel[i][j] = new JLabel(new ImageIcon("./images/vide.png"));
                 this.tabLabel[i][j].addMouseListener(this);
-                this.panel.add(this.tabLabel[i][j]);
+                this.panelMorpion.add(this.tabLabel[i][j]);
             }
         }
 
-        this.frame.add(panel);
+        this.panelChat = new JPanel( new BorderLayout() );
+        this.frame.add(this.panelChat, BorderLayout.EAST);
+
+        this.panelSend = new JPanel();
+        this.panelChat.add(this.panelSend, BorderLayout.SOUTH);
+
+        this.logChat = new JTextArea();
+        this.logChat.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(this.logChat);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        this.panelChat.add(this.logChat, BorderLayout.CENTER);
+
+        this.txtChat = new JTextField();
+        this.panelSend.add(this.txtChat);
+        this.btnChat = new JButton("Envoyer");
+        this.panelSend.add(this.btnChat);
+
+        this.frame.add(this.panelMorpion);
         this.frame.pack();
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setVisible(true);
@@ -54,7 +76,7 @@ public class Morpion implements MouseListener
     public boolean getAJoue            ()             { return this.aJoue           ; }
     public void    setAJoue            (boolean b)    {        this.aJoue   = b     ; }
     public int     getDernierMouvement ()             { return this.dernierMouvement; }
-    public void    majIHM              ()             {        this.panel.repaint() ; }
+    public void    majIHM              ()             {        this.panelMorpion.repaint() ; }
 
     public void    placerJeton(int index, char symbole)
     {
