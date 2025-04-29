@@ -3,9 +3,10 @@ import java.net.*;
 
 public class ClientMorpion
 {
-    private static final int PORT = 5000;
     public static void main(String[] args)
     {
+        final int PORT = 5000;
+
         final String SERVER_ADDRESS = args[0];
         try
         {
