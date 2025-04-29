@@ -29,21 +29,6 @@ public class Morpion implements MouseListener , ActionListener
     {
         this.plateau          = new char  [3][3];
 
-        String themeChoisi = (String) JOptionPane.showInputDialog
-        (
-            this.frame,                      
-            "Choisis un thème :",           
-            "Thème de jeu",                
-            JOptionPane.QUESTION_MESSAGE,   
-            null,                            
-            ENS_THEME,                      
-            ENS_THEME[0]                      
-        );
-
-        if (themeChoisi != null) 
-            setTheme(themeChoisi);
-        else
-            setTheme("basique");
 
         this.tabLabel         = new JLabel[3][3];
         this.aJoue            = false;
@@ -115,7 +100,7 @@ public class Morpion implements MouseListener , ActionListener
         if (plateau[row][col] == ' ')
         {
             this.plateau [row][col] = symbole;
-            this.tabLabel[row][col].setIcon(new ImageIcon("./images/" + symbole + ".png"));
+            this.tabLabel[row][col].setIcon(new ImageIcon("./images/" + this.themeActuel + "/" + symbole + ".png"));
         }
     }
 
