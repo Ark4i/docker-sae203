@@ -2,13 +2,13 @@ import java.io.*;
 import java.net.*;
 
 public class ClientMorpion {
-	private static final int PORT = 5000;
+	private static final int PORT = 8080;
 
 	public static void main(String[] args) {
-		final String SERVER_ADDRESS = args[0];
+		//final String SERVER_ADDRESS = args[0];
 		try {
-			InetAddress hostName = InetAddress.getByName(SERVER_ADDRESS);
-			Socket socket = new Socket(SERVER_ADDRESS, PORT);
+			InetAddress hostName = InetAddress.getLocalHost();//ByName(SERVER_ADDRESS);
+			Socket socket = new Socket(hostName, PORT);
 			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
 			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));

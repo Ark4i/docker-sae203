@@ -3,7 +3,7 @@ import java.net.*;
 
 public class ServeurMorpion {
 	public static void main(String[] args) {
-		final int PORT = 5000;
+		final int PORT = 8080;
 
 		try (ServerSocket serverSocket = new ServerSocket(PORT)) {
 			System.out.println("Le serveur est en attente de connexions...");
