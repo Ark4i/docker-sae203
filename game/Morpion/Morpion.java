@@ -5,6 +5,10 @@ import javax.swing.*;
 
 public class Morpion implements MouseListener , ActionListener
 {
+    private static final String[] ENS_THEME = {"basique","espace","nourriture","planete"};
+
+    private String themeActuel = "basique"; 
+
     private JFrame     frame;
     private JPanel     panelMorpion;
     private JLabel[][] tabLabel;
@@ -20,9 +24,27 @@ public class Morpion implements MouseListener , ActionListener
     private char       monSigne;
     private char       signeOpposant;
 
+
     public Morpion()
     {
         this.plateau          = new char  [3][3];
+
+        String themeChoisi = (String) JOptionPane.showInputDialog
+        (
+            this.frame,                      
+            "Choisis un thème :",           
+            "Thème de jeu",                
+            JOptionPane.QUESTION_MESSAGE,   
+            null,                            
+            ENS_THEME,                      
+            ENS_THEME[0]                      
+        );
+
+        if (themeChoisi != null) 
+            setTheme(themeChoisi);
+        else
+            setTheme("basique");
+
         this.tabLabel         = new JLabel[3][3];
         this.aJoue            = false;
         this.dernierMouvement = -1;
@@ -49,12 +71,6 @@ public class Morpion implements MouseListener , ActionListener
         this.panelSend = new JPanel();
         this.panelChat.add(this.panelSend, BorderLayout.SOUTH);
 
-        /*this.logChat = new JTextArea();
-        this.logChat.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(this.logChat);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        this.logChat.add( scrollPane, BorderLayout.EAST );
-        this.panelChat.add(this.logChat, BorderLayout.CENTER);*/
         this.logChat = new JTextArea();
         this.logChat.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(this.logChat);
@@ -85,6 +101,11 @@ public class Morpion implements MouseListener , ActionListener
     public void    setAJoue            (boolean b)    {        this.aJoue   = b     ; }
     public int     getDernierMouvement ()             { return this.dernierMouvement; }
     public void    majIHM              ()             {        this.panelMorpion.repaint() ; }
+
+    public void setTheme(String theme) 
+    {
+        this.themeActuel = theme;
+    }
 
     public void    placerJeton(int index, char symbole)
     {
