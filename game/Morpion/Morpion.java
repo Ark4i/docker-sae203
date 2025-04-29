@@ -17,7 +17,7 @@ public class Morpion implements MouseListener
 
     public Morpion()
     {
-        this.bChange = false;
+        this.bAJoue = false;
         this.plateau = new char[3][3];
         for ( int cptLig = 0; cptLig< this.plateau.length; cptLig++ )
             for ( int cptCol = 0; cptCol < this.plateau[cptLig].length; cptCol++ )
@@ -56,10 +56,9 @@ public class Morpion implements MouseListener
                     this.tabLabel[cptLig][cptCol].setIcon( new ImageIcon( "./images/" + this.joueur + ".png" ) );
                     this.plateau[cptLig][cptCol] = this.joueur;
                     this.changerJoueur();
-                    System.out.println("aaa");
                 }
         
-        if ( this.gagner() | this.finDujeu() )
+        if ( this.aGagner() | this.finDujeu() )
         {
             this.framePrc.setVisible(false);
             this.framePrc = new JFrame();
@@ -71,7 +70,7 @@ public class Morpion implements MouseListener
 
     public void setAJoue(boolean bool)
     {
-        this.bAJoue = b;
+        this.bAJoue = bool;
     }
 
     public boolean getAJoue()

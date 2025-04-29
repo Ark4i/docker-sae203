@@ -24,7 +24,7 @@ public class ClientMorpion {
 					boolean changement = false;
 					while (!changement)
 					{
-						changement = ctrl.getAChange();
+						changement = ctrl.getAJoue();
 						try
 						{
 							Thread.sleep(50);
@@ -34,19 +34,19 @@ public class ClientMorpion {
 						}
 					}
 					//out.println(ctrl.getInt());
-					ctrl.setAChange(false);
-					ctrl.setEnabled(false);
+					ctrl.setAJoue(false);
+					ctrl.setAJoue(false);
 					try
 					{
 						coupAutre = Integer.parseInt(in.readLine());
-						ctrl.placerJeton(coupAutre);
+						//ctrl.placerJeton(coupAutre);
 					} catch (IOException | NumberFormatException e)
 					{
 						System.out.println("Votre adversaire à gagner");
 						break;
 					}
-					ctrl.majIHM();
-					ctrl.setEnabled(true);
+					//ctrl.majIHM();
+					ctrl.setAJoue(true);
 				}
 			}
 			else
@@ -54,22 +54,22 @@ public class ClientMorpion {
 				System.out.println("j2");
 				while (!ctrl.aGagner())
 				{
-					ctrl.setEnabled(false);
+					ctrl.setAJoue(false);
 					try
 					{
 						coupAutre = Integer.parseInt(in.readLine());
-						ctrl.placerJeton(coupAutre);
+						//ctrl.placerJeton(coupAutre);
 					} catch (IOException | NumberFormatException e)
 					{
 						System.out.println("Votre adversaire à gagner");
 						break;
 					}
-					ctrl.setEnabled(true);
-					ctrl.majIHM();
+					ctrl.setAJoue(true);
+					//ctrl.majIHM();
 					boolean changement = false;
 					while (!changement)
 					{
-						changement = ctrl.getAChange();
+						changement = ctrl.getAJoue();
 						try
 						{
 							Thread.sleep(50);
@@ -79,7 +79,7 @@ public class ClientMorpion {
 						}
 					}
 					//out.println(ctrl.getInt());
-					ctrl.setAChange(false);
+					ctrl.setAJoue(false);
 				}
 			}
 			socket.close();
