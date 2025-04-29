@@ -1,50 +1,124 @@
----
-layout: default
-title: Exemple Dockerfile - Serveur Web
----
 
-# 🎮 Projet Morpion Multijoueur en Java avec Docker
 
-## 📌 Objectifs
+#  Projet Morpion Multijoueur en Java
 
-- Créer un jeu de **Morpion** (Tic-Tac-Toe) multijoueur.
-- Implémenter une architecture client-serveur avec **sockets** en **Java**.
-- Utiliser **Docker** pour l'isolation des services (serveur et clients).
-- Gérer l'affichage graphique avec **Swing** ou version console selon besoin.
+##  Objectifs
+
+- Développer un **jeu de Morpion multijoueur**.
+- Utiliser une architecture **client-serveur** avec **sockets Java**.
+- Intégrer **Docker** pour isoler les services.
+- Permettre une interface graphique avec **Swing**.
+- Collaborer efficacement grâce à **Git**.
 
 ---
 
-## 🧱 Architecture du Projet
+##  Utilisation de Git
 
-Le projet se compose de plusieurs composants principaux : un serveur, deux clients, et un environnement Docker pour exécuter le tout. Voici l'organisation des fichiers dans le projet :
+Nous avons utilisé **Git** comme système de gestion de versions pour :
 
+- **Travailler en équipe** en répartissant les tâches sur différentes branches (`serveur`, `client`, `interface`, etc.).
+- **Sauvegarder l'évolution** du projet avec des commits réguliers et significatifs.
+- **Collaborer via GitHub**, en ouvrant des *pull requests* pour réviser le code avant de le fusionner.
+- Résoudre les conflits et maintenir un historique clair et structuré.
 
----
-
-## 🐳 Conteneurisation avec Docker
-
-1. **Serveur** : Gère les connexions des clients et assure la gestion du jeu (validation des coups, vérification de la victoire).
-2. **Clients** : Se connectent au serveur et jouent le jeu, en envoyant et recevant des coups.
-3. Le réseau privé Docker `morpion-net` permet la communication entre le serveur et les clients.
-
----
-
-## 🕹️ Fonctionnement
-
-Le jeu se déroule de la manière suivante :
-
-1. **Le serveur** attend deux connexions de clients.
-2. **Les clients** se connectent au serveur et commencent à jouer en envoyant leurs mouvements.
-3. Le serveur valide les coups et les renvoie aux autres joueurs.
-4. L’interface graphique (Swing) affiche le **plateau de jeu** et les mises à jour en temps réel.
+Exemple de commandes utilisées :
+```bash
+git clone https://github.com/Ark4i/Docker-sae203-main.git
+git pull
+git add .
+git commit -m "Ajout de l'interface graphique client"
+git push origin client-graphique
+```
 
 ---
 
-## 🚀 Commandes principales
+##  Introduction à Docker
 
-Voici les commandes nécessaires pour faire tourner le projet dans Docker :
+Docker nous a permis de :
 
-### 1. **Build de l'image Docker** :
+- **Créer un environnement reproductible** pour le serveur et les clients.
+
+Nous avons appris les bases de Docker grâce au guide suivant :
+ [Introduction à Docker - abderzah.github.io](https://abderzah.github.io/introduction-docker/)
+
+---
+
+##  Structure du projet
+
+```
+Docker-sae203-main/
+├── game/
+    └── Morpion/
+	    └── ClientMorpion.java
+	    └── Morpion.java
+	    └── ServeurMorpion.java
+├── Dockerfile
+├── README.md
+└── .git/
+```
+
+---
+
+## Docker dans le projet
+
+###  Dockerfile
+
+Le `Dockerfile` compile et exécute le code Java :
+```Dockerfile
+# Use a base image with Java
+
+FROM openjdk:17
+
+  
+
+# Set working directory inside container
+
+WORKDIR /app
+
+  
+
+# Copy Morpion source code and resources into the container
+
+COPY game/Morpion /app
+
+  
+
+# Compile all Java files
+
+RUN javac *.java
+
+  
+
+# Set default command to run the server (can override for client)
+
+CMD ["java", "ServeurMorpion"]
+```
+
+###  Lancement
 
 ```bash
-docker build -t morpion .
+docker build -t morpion-game . 
+docker run --rm -p 5000:5000 morpion-game
+```
+
+---
+
+##  Fonctionnement du Jeu
+
+1. Le **serveur** attend les connexions.
+2. Les **clients** se connectent et jouent à tour de rôle.
+3. Le **serveur** valide les coups et gère les règles du jeu.
+4. L’interface **Swing** affiche le plateau à chaque mise à jour.
+
+---
+
+##  Conclusion
+
+Ce projet nous a permis de :
+
+- Pratiquer la **programmation réseau en Java**.
+- Découvrir **Docker** pour la conteneurisation.
+- Travailler en équipe avec **Git** efficacement.
+- Créer une base pour de futurs projets multijoueurs conteneurisés.
+
+---
