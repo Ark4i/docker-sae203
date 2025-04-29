@@ -1,9 +1,7 @@
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.FileWriter;
-import java.io.IOException;
+import javax.swing.*;
 
 public class Morpion implements MouseListener , ActionListener
 {
@@ -156,16 +154,12 @@ public class Morpion implements MouseListener , ActionListener
 
     private void finJeu(char symbole)
     {
-        if (this.aGagner(symbole))
+        if (this.aGagner(symbole)||this.plateauEstPlein())
         {
-            JOptionPane.showMessageDialog(this.frame, "Le joueur '" + symbole + "' a gagné !");
+            JOptionPane.showConfirmDialog(this.frame, "Voulez vous rejouer ?", "Repondez svp", JOptionPane.YES_NO_OPTION);
             this.frame.dispose();
         }
-        else if (this.plateauEstPlein())
-        {
-            JOptionPane.showMessageDialog(this.frame, "Match nul !");
-            this.frame.dispose();
-        }
+
     }
 
     public void receiveMove(int index)
