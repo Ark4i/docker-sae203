@@ -55,6 +55,7 @@ public class Morpion implements MouseListener , ActionListener
         this.logChat.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(this.logChat);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        this.logChat.add( scrollPane, BorderLayout.EAST );
         this.panelChat.add(this.logChat, BorderLayout.CENTER);
 
         this.txtChat = new JTextField();

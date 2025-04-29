@@ -32,6 +32,8 @@ public class ServeurMorpion
                 String move2 = in2.readLine();
                 if (move2 == null) break;
                 out1.println(move2);
+
+                
             }
 
             joueur1.close();
