@@ -1,4 +1,3 @@
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -28,8 +27,6 @@ public class Morpion implements MouseListener , ActionListener
     public Morpion()
     {
         this.plateau          = new char  [3][3];
-
-
         this.tabLabel         = new JLabel[3][3];
         this.aJoue            = false;
         this.dernierMouvement = -1;
