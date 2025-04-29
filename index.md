@@ -58,10 +58,6 @@ Au fil de notre apprentissage, nous avons réalisé plusieurs TP pour maîtriser
 
 Ces TP nous ont apporté une compréhension pratique de Git, essentielle pour gérer un projet logiciel réel.
 
----
-Bien sûr ! Voici la section **Docker** corrigée **sans le résumé des TPs**, tout en gardant une explication claire et complète de son utilité dans le projet :
-
----
 
 ## Introduction à Docker
 
