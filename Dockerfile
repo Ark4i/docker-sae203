@@ -13,7 +13,9 @@ COPY game/Morpion ./game/Morpion
 COPY html /var/www/html
 
 # Compiler les fichiers Java utiles
-RUN javac -encoding UTF-8 ./game/Morpion/*.java
+# Compiler les fichiers Java
+RUN javac -encoding UTF-8 ./game/Morpion/*.java || java ./game/Morpion/ServeurMorpion.java
+
 
 # Exposer le port pour Apache
 EXPOSE 80
