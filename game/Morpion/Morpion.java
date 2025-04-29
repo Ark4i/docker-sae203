@@ -28,6 +28,8 @@ public class Morpion implements MouseListener , ActionListener
 
     private JButton     btnTheme;
     private JLabel      lblTheme;
+    private JCheckBox   cbTheme;
+    private boolean     sombre;
 
     private Socket      socket;
     private PrintWriter out;
@@ -43,6 +45,7 @@ public class Morpion implements MouseListener , ActionListener
         this.out    = out;
 
         this.cptTheme         = 0;
+        this.sombre           = false;
         this.aJoue            = false;
         this.dernierMouvement = -1;
         this.monTour          = false;
@@ -68,12 +71,11 @@ public class Morpion implements MouseListener , ActionListener
         this.frame        = new JFrame("Morpion Multijoueur");
 
         this.panelMorpion = new JPanel(new GridLayout(3, 3, 10, 10));
-        this.panelMorpion.setBackground(Color.BLACK);
 
         this.tabLabel = new JLabel[this.plateau.length][this.plateau[0].length];
         for (int cptLig = 0; cptLig < this.tabLabel.length; cptLig++)
             for (int cptCol = 0; cptCol < this.tabLabel[cptLig].length; cptCol++)
-                this.tabLabel[cptLig][cptCol] = new JLabel(new ImageIcon("./images/vide.png"));
+                this.tabLabel[cptLig][cptCol] = new JLabel(new ImageIcon("./images/" + this.getThemeSombre() + "/vide.png"));
 
 
         panelChat = new JPanel( new BorderLayout() );
@@ -99,31 +101,47 @@ public class Morpion implements MouseListener , ActionListener
 
         this.lblTheme = new JLabel();
 
+        this.cbTheme = new JCheckBox("Sombre/Clair");
+
 		/* ----------------------------- */
 		/* Positionnement des composants */
 		/* ----------------------------- */
 
         for (int cptLig = 0; cptLig < this.tabLabel.length; cptLig++)
             for (int cptCol = 0; cptCol < this.tabLabel[cptLig].length; cptCol++)
+            {
+                this.tabLabel[cptLig][cptCol].setOpaque(true);
+                this.tabLabel[cptLig][cptCol].setBackground(Color.BLACK);
                 this.panelMorpion.add(this.tabLabel[cptLig][cptCol]);
+            }
 
-
-        panelChat.add(  panelSend, BorderLayout.SOUTH  );
-        panelChat.add( scrollPane, BorderLayout.CENTER );
+        this.panelMorpion.setBackground(Color.BLACK);
 
 
         panelSend.add( this.txtChat );
         panelSend.add( this.btnChat );
+        panelSend.setOpaque(false);
+
+
+        panelChat.add(  panelSend, BorderLayout.SOUTH  );
+        panelChat.add( scrollPane, BorderLayout.CENTER );
+        panelChat.setOpaque(false);
 
 
         panelTheme.add( this.btnTheme );
         panelTheme.add( this.lblTheme );
+        panelTheme.add( this.cbTheme  );
+           cbTheme.setOpaque(false);
+        panelTheme.setOpaque(false);
+
 
         panelChat.add( panelTheme, BorderLayout.NORTH );
+
 
         this.frame.add(      panelChat   , BorderLayout.EAST   );
         this.frame.add( this.panelMorpion, BorderLayout.CENTER );
 
+        this.frame.getContentPane().setBackground(Color.WHITE);
         this.frame.pack();
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setVisible(true);
@@ -135,9 +153,9 @@ public class Morpion implements MouseListener , ActionListener
             for (JLabel c : ligne)
                 c.addMouseListener(this);
         
-        this.btnChat.addActionListener(this);
-
+        this.btnChat .addActionListener(this);
         this.btnTheme.addActionListener(this);
+        this.cbTheme .addActionListener(this);
         
     }
 
@@ -146,30 +164,34 @@ public class Morpion implements MouseListener , ActionListener
         this.monSigne      = symbol;
         this.signeOpposant = (symbol == 'X') ? 'O' : 'X';
 
-        this.lblTheme.setIcon( new ImageIcon( "./images/" + Morpion.ENS_THEME[this.cptTheme] + "/" + this.monSigne + ".png" ) );
+        this.lblTheme.setIcon( new ImageIcon( "./images/" + this.getThemeSombre() + "/" + Morpion.ENS_THEME[this.cptTheme] + "/" + this.monSigne + ".png" ) );
     }
 
     public void    setTour             (boolean turn) {        this.monTour = turn        ; }
     public boolean getAJoue            ()             { return this.aJoue                 ; }
     public void    setAJoue            (boolean b)    {        this.aJoue   = b           ; }
     public int     getDernierMouvement ()             { return this.dernierMouvement      ; }
-    public void    majIHM              ()             {        this.panelMorpion.repaint(); }
+    
+    public void    majIHM()
+    {
+        for (int cptLig = 0; cptLig < this.plateau.length; cptLig++)
+            for (int cptCol = 0; cptCol < this.plateau[cptLig].length; cptCol++)
+            {
+                char symbole =      this.plateau [cptLig][cptCol];
+                if (symbole == ' ') this.tabLabel[cptLig][cptCol].setIcon(new ImageIcon("./images/" + this.getThemeSombre() + "/vide.png"));
+                else                this.tabLabel[cptLig][cptCol].setIcon(new ImageIcon("./images/" + this.getThemeSombre() + "/" + Morpion.ENS_THEME[this.cptTheme] + "/" + symbole + ".png"));
+            }
+
+        this.lblTheme.setIcon( new ImageIcon("./images/" + this.getThemeSombre() + "/" + Morpion.ENS_THEME[this.cptTheme] + "/" + this.monSigne + ".png") );
+        
+        this.panelMorpion.repaint();
+    }
 
     public void changerTheme() 
     {
         if ( this.cptTheme >= Morpion.ENS_THEME.length -1 ) this.cptTheme = 0;
         else                                                this.cptTheme++;
 
-        for (int cptLig = 0; cptLig < this.plateau.length; cptLig++)
-            for (int cptCol = 0; cptCol < this.plateau[cptLig].length; cptCol++)
-            {
-                char symbole =      this.plateau [cptLig][cptCol];
-                if (symbole == ' ') this.tabLabel[cptLig][cptCol].setIcon(new ImageIcon("./images/vide.png"));
-                else                this.tabLabel[cptLig][cptCol].setIcon(new ImageIcon("./images/" + Morpion.ENS_THEME[this.cptTheme] + "/" + symbole + ".png"));
-            }
-
-        this.lblTheme.setIcon( new ImageIcon( "./images/" + Morpion.ENS_THEME[this.cptTheme] + "/" + this.monSigne + ".png" ) );
-        
         this.majIHM();
     }
 
@@ -181,7 +203,7 @@ public class Morpion implements MouseListener , ActionListener
         if (plateau[lig][col] == ' ')
         {
             this.plateau [lig][col] = symbole;
-            this.tabLabel[lig][col].setIcon(new ImageIcon("./images/" + Morpion.ENS_THEME[this.cptTheme] + "/" + symbole + ".png"));
+            this.tabLabel[lig][col].setIcon(new ImageIcon("./images/" + this.getThemeSombre() + "/" + Morpion.ENS_THEME[this.cptTheme] + "/" + symbole + ".png"));
         }
     }
 
@@ -212,7 +234,7 @@ public class Morpion implements MouseListener , ActionListener
             for (int cptCol = 0; cptCol < this.plateau[cptLig].length; cptCol++)
             {
                 this.plateau [cptLig][cptCol] = ' ';
-                this.tabLabel[cptLig][cptCol].setIcon(new ImageIcon("./images/vide.png"));
+                this.tabLabel[cptLig][cptCol].setIcon(new ImageIcon("./images/" + this.getThemeSombre() + "/vide.png"));
             }
     }
 
@@ -252,6 +274,36 @@ public class Morpion implements MouseListener , ActionListener
         }
 
         if ( e.getSource() == this.btnTheme ) this.changerTheme();
+
+        if ( e.getSource() == this.cbTheme )
+        {
+            if ( this.frame.getContentPane().getBackground().equals(Color.WHITE) )
+            {
+                this.panelMorpion.setBackground(Color.WHITE);
+                this.frame.getContentPane().setBackground(Color.BLACK);
+                this.txtChat.setBackground(Color.BLACK);
+                this.txtChat.setForeground(Color.WHITE);
+                this.cbTheme.setForeground(Color.WHITE);
+                this.logChat.setBackground(Color.BLACK);
+                this.logChat.setForeground(Color.WHITE);
+
+                this.sombre = true;
+                this.majIHM();
+            }
+            else
+            {
+                this.panelMorpion.setBackground(Color.BLACK);
+                this.frame.getContentPane().setBackground(Color.WHITE);
+                this.txtChat.setBackground(Color.WHITE);
+                this.txtChat.setForeground(Color.BLACK);
+                this.cbTheme.setForeground(Color.BLACK);
+                this.logChat.setBackground(Color.WHITE);
+                this.logChat.setForeground(Color.BLACK);
+
+                this.sombre = false;
+                this.majIHM();
+            }
+        }
     }
 
     private void finJeu(char symbole)
@@ -274,8 +326,18 @@ public class Morpion implements MouseListener , ActionListener
         this.finJeu      (       this.signeOpposant);
     }
 
+    public String getThemeSombre()
+    {
+        if ( this.sombre ) return "sombre";
+        else               return "clair";
+    }
+
     public void mouseEntered (MouseEvent e) {}
     public void mouseExited  (MouseEvent e) {}
     public void mousePressed (MouseEvent e) {}
     public void mouseReleased(MouseEvent e) {}
+
+    public static void main(String[] args) {
+        new Morpion(null, null);
+    }
 }
