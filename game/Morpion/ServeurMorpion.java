@@ -1,42 +1,40 @@
+
 import java.io.*;
 import java.net.*;
 
 public class ServeurMorpion {
-	public static void main(String[] args) {
-		final int PORT = 8080;
+    public static void main(String[] args) {
+        final int PORT = 5000;
 
-		try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-			System.out.println("Le serveur est en attente de connexions...");
+        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
+            System.out.println("En attente des joueurs...");
+            Socket joueur1 = serverSocket.accept();
+            System.out.println("Joueur 1 connecté.");
+            Socket joueur2 = serverSocket.accept();
+            System.out.println("Joueur 2 connecté.");
 
-			Socket joueur1Socket = serverSocket.accept();
-			System.out.println("Joueur 1 connecté : " + joueur1Socket);
-			Socket joueur2Socket = serverSocket.accept();
-			System.out.println("Joueur 2 connecté : " + joueur2Socket);
+            PrintWriter out1 = new PrintWriter(joueur1.getOutputStream(), true);
+            BufferedReader in1 = new BufferedReader(new InputStreamReader(joueur1.getInputStream()));
+            PrintWriter out2 = new PrintWriter(joueur2.getOutputStream(), true);
+            BufferedReader in2 = new BufferedReader(new InputStreamReader(joueur2.getInputStream()));
 
-			PrintWriter joueur1Out = new PrintWriter(joueur1Socket.getOutputStream(), true);
+            out1.println("j1");
+            out2.println("j2");
 
-			BufferedReader joueur1In = new BufferedReader(new InputStreamReader(joueur1Socket.getInputStream()));
+            while (true) {
+                String move1 = in1.readLine();
+                if (move1 == null) break;
+                out2.println(move1);
 
-			PrintWriter joueur2Out = new PrintWriter(joueur2Socket.getOutputStream(), true);
+                String move2 = in2.readLine();
+                if (move2 == null) break;
+                out1.println(move2);
+            }
 
-			BufferedReader joueur2In = new BufferedReader(new InputStreamReader(joueur2Socket.getInputStream()));
-			joueur1Out.println("j1");
-			joueur2Out.println("j2");
-				while (true)
-				{
-					try{
-					int coupJoueur1 = Integer.parseInt(joueur1In.readLine());
-					joueur2Out.println(coupJoueur1);
-					}catch(IOException | NumberFormatException e) {break;}
-
-					try{
-					int coupJoueur2 = Integer.parseInt(joueur2In.readLine());
-					joueur1Out.println(coupJoueur2);
-					}catch(IOException | NumberFormatException e) {break;}
-				}
-			joueur1Socket.close();
-			joueur2Socket.close();
-		
-		} catch (IOException e) { e.printStackTrace();}
-	}
+            joueur1.close();
+            joueur2.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
