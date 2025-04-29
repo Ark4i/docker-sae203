@@ -24,6 +24,7 @@ public class Morpion implements MouseListener , ActionListener
     private char       signeOpposant;
 
     private JButton    btnTheme;
+    private JLabel     lblTheme;
 
 
     public Morpion()
@@ -37,6 +38,7 @@ public class Morpion implements MouseListener , ActionListener
         this.aJoue            = false;
         this.dernierMouvement = -1;
         this.monTour          = false;
+        this.monSigne         = ' ';
 
         this.plateau          = new char [3][3];
         for (int cptLig = 0; cptLig < this.plateau.length; cptLig++)
@@ -87,6 +89,8 @@ public class Morpion implements MouseListener , ActionListener
 
         this.btnTheme = new JButton("Thème");
 
+        this.lblTheme = new JLabel();
+
 		/* ----------------------------- */
 		/* Positionnement des composants */
 		/* ----------------------------- */
@@ -105,8 +109,9 @@ public class Morpion implements MouseListener , ActionListener
 
 
         panelTheme.add( this.btnTheme );
-        panelChat.add( panelTheme, BorderLayout.NORTH );
+        panelTheme.add( this.lblTheme );
 
+        panelChat.add( panelTheme, BorderLayout.NORTH );
 
         this.frame.add(      panelChat   , BorderLayout.EAST   );
         this.frame.add( this.panelMorpion, BorderLayout.CENTER );
@@ -132,6 +137,8 @@ public class Morpion implements MouseListener , ActionListener
     {
         this.monSigne      = symbol;
         this.signeOpposant = (symbol == 'X') ? 'O' : 'X';
+
+        this.lblTheme.setIcon( new ImageIcon( "./images/" + Morpion.ENS_THEME[this.cptTheme] + "/" + this.monSigne + ".png" ) );
     }
 
     public void    setTour             (boolean turn) {        this.monTour = turn        ; }
@@ -152,6 +159,8 @@ public class Morpion implements MouseListener , ActionListener
                 if (symbole == ' ') this.tabLabel[cptLig][cptCol].setIcon(new ImageIcon("./images/vide.png"));
                 else                this.tabLabel[cptLig][cptCol].setIcon(new ImageIcon("./images/" + Morpion.ENS_THEME[this.cptTheme] + "/" + symbole + ".png"));
             }
+
+        this.lblTheme.setIcon( new ImageIcon( "./images/" + Morpion.ENS_THEME[this.cptTheme] + "/" + this.monSigne + ".png" ) );
         
         this.majIHM();
     }
@@ -258,4 +267,8 @@ public class Morpion implements MouseListener , ActionListener
     public void mouseExited  (MouseEvent e) {}
     public void mousePressed (MouseEvent e) {}
     public void mouseReleased(MouseEvent e) {}
+
+    public static void main(String[] args) {
+        new Morpion();
+    }
 }
