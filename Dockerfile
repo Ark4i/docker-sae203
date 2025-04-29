@@ -1,3 +1,6 @@
 FROM debian:latest
-COPY ./html/ /usr/local/apache2/htdocs/
+COPY .*
+
+RUN javac -encoding UTF-8 ./game/Morpion/ServerMorpion.java
+
 EXPOSE 80
