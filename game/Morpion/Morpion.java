@@ -51,12 +51,17 @@ public class Morpion implements MouseListener , ActionListener
         this.panelSend = new JPanel();
         this.panelChat.add(this.panelSend, BorderLayout.SOUTH);
 
-        this.logChat = new JTextArea();
+        /*this.logChat = new JTextArea();
         this.logChat.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(this.logChat);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         this.logChat.add( scrollPane, BorderLayout.EAST );
-        this.panelChat.add(this.logChat, BorderLayout.CENTER);
+        this.panelChat.add(this.logChat, BorderLayout.CENTER);*/
+        this.logChat = new JTextArea();
+        this.logChat.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(this.logChat);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        this.panelChat.add(scrollPane, BorderLayout.CENTER);
 
         this.txtChat = new JTextField();
         this.txtChat.setPreferredSize(new Dimension(300, 30));
