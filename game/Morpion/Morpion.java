@@ -6,7 +6,7 @@ public class Morpion implements MouseListener , ActionListener
 {
     private static final String[] ENS_THEME = {"basique","espace","nourriture","planete"};
 
-    private String themeActuel = "basique"; 
+    private int        cptTheme; 
 
     private JFrame     frame;
     private JPanel     panelMorpion;
@@ -22,10 +22,13 @@ public class Morpion implements MouseListener , ActionListener
     private int        dernierMouvement;
     private char       monSigne;
     private char       signeOpposant;
+    private JButton    btnTheme;
+    private JPanel     panelTheme;
 
 
     public Morpion()
     {
+        this.cptTheme         = 0;
         this.plateau          = new char  [3][3];
         this.tabLabel         = new JLabel[3][3];
         this.aJoue            = false;
@@ -46,6 +49,9 @@ public class Morpion implements MouseListener , ActionListener
                 this.panelMorpion.add(this.tabLabel[i][j]);
             }
         }
+
+        
+        
 
         this.panelChat = new JPanel( new BorderLayout() );
         this.frame.add(this.panelChat, BorderLayout.EAST);
@@ -70,6 +76,12 @@ public class Morpion implements MouseListener , ActionListener
         this.frame.pack();
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setVisible(true);
+
+        this.panelTheme = new JPanel();
+        this.btnTheme   = new JButton("Thème");
+        this.btnTheme.addActionListener(this);
+        this.panelTheme.add( this.btnTheme );
+        this.panelChat.add( this.panelTheme, BorderLayout.NORTH );
     }
 
     public void setMonSigne(char symbol)
@@ -84,12 +96,18 @@ public class Morpion implements MouseListener , ActionListener
     public int     getDernierMouvement ()             { return this.dernierMouvement; }
     public void    majIHM              ()             {        this.panelMorpion.repaint() ; }
 
-    public void setTheme(String theme) 
+    public void changerTheme() 
     {
-        this.themeActuel = theme;
+        this.cptTheme++;
+        if ( this.cptTheme > Morpion.ENS_THEME.length -1  ) this.cptTheme = 0;
+        for( int cptlig = 0; cptlig < this.tabLabel.length; cptlig++ )
+            for( int cptCol = 0; cptCol < this.tabLabel[cptlig].length; cptCol++ )
+                if ( this.plateau[cptlig][cptCol] != ' ' )
+                    this.tabLabel[cptlig][cptCol] = new JLabel( new ImageIcon("./images/" + Morpion.ENS_THEME[this.cptTheme] + "/" + this.plateau[cptlig][cptCol] + ".png") );
+
     }
 
-    public void    placerJeton(int index, char symbole)
+    public void placerJeton(int index, char symbole)
     {
         int row = index / 3;
         int col = index % 3;
@@ -97,7 +115,7 @@ public class Morpion implements MouseListener , ActionListener
         if (plateau[row][col] == ' ')
         {
             this.plateau [row][col] = symbole;
-            this.tabLabel[row][col].setIcon(new ImageIcon("./images/" + this.themeActuel + "/" + symbole + ".png"));
+            this.tabLabel[row][col].setIcon(new ImageIcon("./images/" + Morpion.ENS_THEME[this.cptTheme] + "/" + symbole + ".png"));
         }
     }
 
@@ -163,6 +181,9 @@ public class Morpion implements MouseListener , ActionListener
 
             this.txtChat.setText("");
         }
+
+        if ( e.getSource() == this.btnTheme )
+            this.changerTheme();
     }
 
     private void finJeu(char symbole)
