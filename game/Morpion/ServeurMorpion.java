@@ -1,4 +1,3 @@
-
 import java.io.*;
 import java.net.*;
 
@@ -20,10 +19,8 @@ public class ServeurMorpion {
             PrintWriter out2 = new PrintWriter(joueur2.getOutputStream(), true);
             BufferedReader in2 = new BufferedReader(new InputStreamReader(joueur2.getInputStream()));
 
-            
-           
-
-            while (true) {
+            while (true)
+            {
                 String move1 = in1.readLine();
                 if (move1 == null) break;
                 out2.println(move1);
@@ -35,8 +32,7 @@ public class ServeurMorpion {
 
             joueur1.close();
             joueur2.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+        catch (IOException e) { e.printStackTrace(); }
     }
 }

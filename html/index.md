@@ -1,41 +1,45 @@
-# 🎮 Projet Morpion Multijoueur
+# 🎮 Projet Morpion Multijoueur en Java avec Docker
 
-Bienvenue sur le projet **Morpion multijoueur** réalisé en Java et Docker ! Ce projet met en œuvre un jeu de Morpion (Tic-Tac-Toe) en réseau, avec une interface graphique et une architecture client-serveur.
+## 📌 Objectifs
+
+- Créer un jeu de **Morpion** (Tic-Tac-Toe) multijoueur.
+- Implémenter une architecture client-serveur avec **sockets** en **Java**.
+- Utiliser **Docker** pour l'isolation des services (serveur et clients).
+- Gérer l'affichage graphique avec **Swing** ou version console selon besoin.
 
 ---
 
 ## 🧱 Architecture du Projet
 
-Le projet est divisé en plusieurs composants :
+Le projet se compose de plusieurs composants principaux : un serveur, deux clients, et un environnement Docker pour exécuter le tout. Voici l'organisation des fichiers dans le projet :
 
-- `ServeurMorpion.java` : gère les connexions et relaie les coups entre les joueurs.
-- `ClientMorpion.java` : représente chaque joueur et permet de jouer via une interface graphique.
-- `Morpion.java` : logique du jeu et gestion de l'IHM.
-- Dockerfile : création d'une image avec serveur et clients Java.
-- `docker-compose.yml` *(optionnel)* : orchestrer les conteneurs (si autorisé).
 
 ---
 
-## 🚀 Fonctionnement
+## 🐳 Conteneurisation avec Docker
 
-### 🔗 Communication Client-Serveur
+1. **Serveur** : Gère les connexions des clients et assure la gestion du jeu (validation des coups, vérification de la victoire).
+2. **Clients** : Se connectent au serveur et jouent le jeu, en envoyant et recevant des coups.
+3. Le réseau privé Docker `morpion-net` permet la communication entre le serveur et les clients.
 
-- Le serveur écoute sur le port `5000`.
-- Le premier client connecté est `joueur 1 (X)`, le second est `joueur 2 (O)`.
-- Les coups sont envoyés par socket TCP.
-- Chaque client met à jour son interface après chaque coup.
+---
 
-### 🐳 Docker
+## 🕹️ Fonctionnement
 
-Chaque joueur et le serveur sont lancés dans des conteneurs Docker sur le même réseau (`morpion-net`) :
+Le jeu se déroule de la manière suivante :
+
+1. **Le serveur** attend deux connexions de clients.
+2. **Les clients** se connectent au serveur et commencent à jouer en envoyant leurs mouvements.
+3. Le serveur valide les coups et les renvoie aux autres joueurs.
+4. L’interface graphique (Swing) affiche le **plateau de jeu** et les mises à jour en temps réel.
+
+---
+
+## 🚀 Commandes principales
+
+Voici les commandes nécessaires pour faire tourner le projet dans Docker :
+
+### 1. **Build de l'image Docker** :
 
 ```bash
-# Construction de l'image
 docker build -t morpion .
-
-# Lancement du serveur
-docker run -dit --name serveur_morpion --network morpion-net morpion java ServeurMorpion
-
-# Lancement des clients
-docker run -it --name client1_morpion --network morpion-net morpion java ClientMorpion serveur_morpion
-docker run -it --name client2_morpion --network morpion-net morpion java ClientMorpion serveur_morpion
