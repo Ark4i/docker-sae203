@@ -7,64 +7,64 @@ public class Morpion implements MouseListener
 {
     private JFrame     frame;
     private JPanel     panel;
-    private JLabel[][] grid;
-    private char[][]   board;
-    private boolean    myTurn;
-    private boolean    hasPlayed;
-    private int        lastMoveIndex;
-    private char       mySymbol;
-    private char       opponentSymbol;
+    private JLabel[][] tabLabel;
+    private char  [][] plateau;
+    private boolean    monTour;
+    private boolean    aJoue;
+    private int        dernierMouvement;
+    private char       monSigne;
+    private char       signeOpposant;
 
     public Morpion()
     {
-        board         = new char[3][3];
-        grid          = new JLabel[3][3];
-        hasPlayed     = false;
-        lastMoveIndex = -1;
-        myTurn        = false;
+        this.plateau          = new char  [3][3];
+        this.tabLabel         = new JLabel[3][3];
+        this.aJoue            = false;
+        this.dernierMouvement = -1;
+        this.monTour          = false;
 
-        frame = new JFrame("Morpion Multijoueur");
-        panel = new JPanel(new GridLayout(3, 3, 10, 10));
-        panel.setBackground(Color.BLACK);
+        this.frame = new JFrame("Morpion Multijoueur");
+        this.panel = new JPanel(new GridLayout(3, 3, 10, 10));
+        this.panel.setBackground(Color.BLACK);
 
         for (int i = 0; i < 3; i++)
         {
             for (int j = 0; j < 3; j++)
             {
-                board[i][j] = ' ';
-                grid [i][j] = new JLabel(new ImageIcon("./images/vide.png"));
-                grid [i][j].addMouseListener(this);
-                panel.add(grid[i][j]);
+                this.plateau [i][j] = ' ';
+                this.tabLabel[i][j] = new JLabel(new ImageIcon("./images/vide.png"));
+                this.tabLabel[i][j].addMouseListener(this);
+                this.panel.add(this.tabLabel[i][j]);
             }
         }
 
-        frame.add(panel);
-        frame.pack();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+        this.frame.add(panel);
+        this.frame.pack();
+        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frame.setVisible(true);
     }
 
-    public void setMySymbol(char symbol)
+    public void setMonSigne(char symbol)
     {
-        mySymbol = symbol;
-        opponentSymbol = (symbol == 'X') ? 'O' : 'X';
+        this.monSigne      = symbol;
+        this.signeOpposant = (symbol == 'X') ? 'O' : 'X';
     }
 
-    public void    setTurn (boolean turn) { myTurn = turn       ; }
-    public boolean getAJoue()             { return hasPlayed    ; }
-    public void    setAJoue(boolean b)    { hasPlayed = b       ; }
-    public int     getInt  ()             { return lastMoveIndex; }
-    public void    majIHM  ()             { panel.repaint()     ; }
+    public void    setTour             (boolean turn) {        this.monTour = turn  ; }
+    public boolean getAJoue            ()             { return this.aJoue           ; }
+    public void    setAJoue            (boolean b)    {        this.aJoue   = b     ; }
+    public int     getDernierMouvement ()             { return this.dernierMouvement; }
+    public void    majIHM              ()             {        this.panel.repaint() ; }
 
     public void    placerJeton(int index, char symbole)
     {
         int row = index / 3;
         int col = index % 3;
 
-        if (board[row][col] == ' ')
+        if (plateau[row][col] == ' ')
         {
-            board[row][col] = symbole;
-            grid[row][col].setIcon(new ImageIcon("./images/" + symbole + ".png"));
+            this.plateau [row][col] = symbole;
+            this.tabLabel[row][col].setIcon(new ImageIcon("./images/" + symbole + ".png"));
         }
     }
 
@@ -72,17 +72,17 @@ public class Morpion implements MouseListener
     {
         for (int i = 0; i < 3; i++)
         {
-            if (board[i][0] == symbole && board[i][1] == symbole && board[i][2] == symbole) return true;
-            if (board[0][i] == symbole && board[1][i] == symbole && board[2][i] == symbole) return true;
+            if (this.plateau[i][0] == symbole && this.plateau[i][1] == symbole && this.plateau[i][2] == symbole) return true;
+            if (this.plateau[0][i] == symbole && this.plateau[1][i] == symbole && this.plateau[2][i] == symbole) return true;
         }
-        if (board[0][0] == symbole && board[1][1] == symbole && board[2][2] == symbole) return true;
-        if (board[0][2] == symbole && board[1][1] == symbole && board[2][0] == symbole) return true;
+        if (this.plateau[0][0] == symbole && this.plateau[1][1] == symbole && this.plateau[2][2] == symbole) return true;
+        if (this.plateau[0][2] == symbole && this.plateau[1][1] == symbole && this.plateau[2][0] == symbole) return true;
         return false;
     }
 
-    private boolean isBoardFull()
+    private boolean plateauEstPlein()
     {
-        for (char[] row : board)
+        for (char[] row : this.plateau)
             for (char c : row)
                 if (c == ' ') return false;
         return true;
@@ -90,43 +90,43 @@ public class Morpion implements MouseListener
 
     public void mouseClicked(MouseEvent e)
     {
-        if (!myTurn) return;
+        if (!this.monTour) return;
 
         for (int i = 0; i < 3; i++)
         {
             for (int j = 0; j < 3; j++)
             {
-                if (e.getSource() == grid[i][j] && board[i][j] == ' ')
+                if (e.getSource() == this.tabLabel[i][j] && this.plateau[i][j] == ' ')
                 {
-                    placerJeton(i * 3 + j, mySymbol);
-                    lastMoveIndex = i * 3 + j;
-                    hasPlayed = true;
-                    myTurn = false;
-                    checkGameEnd(mySymbol);
+                    this.placerJeton(i * 3 + j, this.monSigne);
+                    this.dernierMouvement = i * 3 + j;
+                    this.aJoue            = true;
+                    this.monTour          = false;
+                    this.finJeu(this.monSigne);
                     return;
                 }
             }
         }
     }
 
-    private void checkGameEnd(char symbole)
+    private void finJeu(char symbole)
     {
-        if (aGagner(symbole))
+        if (this.aGagner(symbole))
         {
-            JOptionPane.showMessageDialog(frame, "Le joueur '" + symbole + "' a gagné !");
-            frame.dispose();
+            JOptionPane.showMessageDialog(this.frame, "Le joueur '" + symbole + "' a gagné !");
+            this.frame.dispose();
         }
-        else if (isBoardFull())
+        else if (this.plateauEstPlein())
         {
-            JOptionPane.showMessageDialog(frame, "Match nul !");
-            frame.dispose();
+            JOptionPane.showMessageDialog(this.frame, "Match nul !");
+            this.frame.dispose();
         }
     }
 
     public void receiveMove(int index)
     {
-        placerJeton(index, opponentSymbol);
-        checkGameEnd(opponentSymbol);
+        this.placerJeton (index, this.signeOpposant);
+        this.finJeu      (       this.signeOpposant);
     }
 
     public void mouseEntered (MouseEvent e) {}
