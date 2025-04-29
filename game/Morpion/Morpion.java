@@ -8,7 +8,7 @@ public class Morpion implements MouseListener
     private JFrame     frame;
     private JPanel     panel;
     private JLabel[][] grid;
-    private char[][]   board;
+    private char  [][] board;
     private boolean    myTurn;
     private boolean    hasPlayed;
     private int        lastMoveIndex;
@@ -17,44 +17,44 @@ public class Morpion implements MouseListener
 
     public Morpion()
     {
-        board         = new char[3][3];
-        grid          = new JLabel[3][3];
-        hasPlayed     = false;
-        lastMoveIndex = -1;
-        myTurn        = false;
+        this.board         = new char  [3][3];
+        this.grid          = new JLabel[3][3];
+        this.hasPlayed     = false;
+        this.lastMoveIndex = -1;
+        this.myTurn        = false;
 
-        frame = new JFrame("Morpion Multijoueur");
-        panel = new JPanel(new GridLayout(3, 3, 10, 10));
-        panel.setBackground(Color.BLACK);
+        this.frame = new JFrame("Morpion Multijoueur");
+        this.panel = new JPanel(new GridLayout(3, 3, 10, 10));
+        this.panel.setBackground(Color.BLACK);
 
         for (int i = 0; i < 3; i++)
         {
             for (int j = 0; j < 3; j++)
             {
-                board[i][j] = ' ';
-                grid [i][j] = new JLabel(new ImageIcon("./images/vide.png"));
-                grid [i][j].addMouseListener(this);
-                panel.add(grid[i][j]);
+                this.board[i][j] = ' ';
+                this.grid [i][j] = new JLabel(new ImageIcon("./images/vide.png"));
+                this.grid [i][j].addMouseListener(this);
+                this.panel.add(grid[i][j]);
             }
         }
 
-        frame.add(panel);
-        frame.pack();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+        this.frame.add(panel);
+        this.frame.pack();
+        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frame.setVisible(true);
     }
 
     public void setMySymbol(char symbol)
     {
-        mySymbol = symbol;
-        opponentSymbol = (symbol == 'X') ? 'O' : 'X';
+        this.mySymbol       = symbol;
+        this.opponentSymbol = (symbol == 'X') ? 'O' : 'X';
     }
 
-    public void    setTurn (boolean turn) { myTurn = turn       ; }
-    public boolean getAJoue()             { return hasPlayed    ; }
-    public void    setAJoue(boolean b)    { hasPlayed = b       ; }
-    public int     getInt  ()             { return lastMoveIndex; }
-    public void    majIHM  ()             { panel.repaint()     ; }
+    public void    setTurn (boolean turn) { this.myTurn    = turn    ; }
+    public boolean getAJoue()             { return this.hasPlayed    ; }
+    public void    setAJoue(boolean b)    { this.hasPlayed = b       ; }
+    public int     getInt  ()             { return this.lastMoveIndex; }
+    public void    majIHM  ()             { this.panel.repaint()     ; }
 
     public void    placerJeton(int index, char symbole)
     {
@@ -63,8 +63,8 @@ public class Morpion implements MouseListener
 
         if (board[row][col] == ' ')
         {
-            board[row][col] = symbole;
-            grid[row][col].setIcon(new ImageIcon("./images/" + symbole + ".png"));
+            this.board[row][col] = symbole;
+            this.grid [row][col].setIcon(new ImageIcon("./images/" + symbole + ".png"));
         }
     }
 
@@ -72,17 +72,17 @@ public class Morpion implements MouseListener
     {
         for (int i = 0; i < 3; i++)
         {
-            if (board[i][0] == symbole && board[i][1] == symbole && board[i][2] == symbole) return true;
-            if (board[0][i] == symbole && board[1][i] == symbole && board[2][i] == symbole) return true;
+            if (this.board[i][0] == symbole && this.board[i][1] == symbole && this.board[i][2] == symbole) return true;
+            if (this.board[0][i] == symbole && this.board[1][i] == symbole && this.board[2][i] == symbole) return true;
         }
-        if (board[0][0] == symbole && board[1][1] == symbole && board[2][2] == symbole) return true;
-        if (board[0][2] == symbole && board[1][1] == symbole && board[2][0] == symbole) return true;
+        if (this.board[0][0] == symbole && this.board[1][1] == symbole && this.board[2][2] == symbole) return true;
+        if (this.board[0][2] == symbole && this.board[1][1] == symbole && this.board[2][0] == symbole) return true;
         return false;
     }
 
     private boolean isBoardFull()
     {
-        for (char[] row : board)
+        for (char[] row : this.board)
             for (char c : row)
                 if (c == ' ') return false;
         return true;
@@ -90,19 +90,19 @@ public class Morpion implements MouseListener
 
     public void mouseClicked(MouseEvent e)
     {
-        if (!myTurn) return;
+        if (!this.myTurn) return;
 
         for (int i = 0; i < 3; i++)
         {
             for (int j = 0; j < 3; j++)
             {
-                if (e.getSource() == grid[i][j] && board[i][j] == ' ')
+                if (e.getSource() == this.grid[i][j] && this.board[i][j] == ' ')
                 {
-                    placerJeton(i * 3 + j, mySymbol);
-                    lastMoveIndex = i * 3 + j;
-                    hasPlayed = true;
-                    myTurn = false;
-                    checkGameEnd(mySymbol);
+                    this.placerJeton(i * 3 + j, this.mySymbol);
+                    this.lastMoveIndex = i * 3 + j;
+                    this.hasPlayed = true;
+                    this.myTurn = false;
+                    this.checkGameEnd(this.mySymbol);
                     return;
                 }
             }
@@ -113,20 +113,20 @@ public class Morpion implements MouseListener
     {
         if (aGagner(symbole))
         {
-            JOptionPane.showMessageDialog(frame, "Le joueur '" + symbole + "' a gagné !");
-            frame.dispose();
+            JOptionPane.showMessageDialog(this.frame, "Le joueur '" + symbole + "' a gagné !");
+            this.frame.dispose();
         }
         else if (isBoardFull())
         {
-            JOptionPane.showMessageDialog(frame, "Match nul !");
-            frame.dispose();
+            JOptionPane.showMessageDialog(this.frame, "Match nul !");
+            this.frame.dispose();
         }
     }
 
     public void receiveMove(int index)
     {
-        placerJeton(index, opponentSymbol);
-        checkGameEnd(opponentSymbol);
+        placerJeton (index, this.opponentSymbol);
+        checkGameEnd(       this.opponentSymbol);
     }
 
     public void mouseEntered (MouseEvent e) {}
