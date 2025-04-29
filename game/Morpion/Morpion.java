@@ -2,8 +2,10 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.FileWriter;
+import java.io.IOException;
 
-public class Morpion implements MouseListener
+public class Morpion implements MouseListener , ActionListener
 {
     private JFrame     frame;
     private JPanel     panelMorpion;
@@ -56,9 +58,11 @@ public class Morpion implements MouseListener
         this.panelChat.add(this.logChat, BorderLayout.CENTER);
 
         this.txtChat = new JTextField();
+        this.txtChat.setPreferredSize(new Dimension(300, 30));
         this.panelSend.add(this.txtChat);
         this.btnChat = new JButton("Envoyer");
         this.panelSend.add(this.btnChat);
+        this.btnChat.addActionListener(this);
 
         this.frame.add(this.panelMorpion);
         this.frame.pack();
@@ -128,6 +132,19 @@ public class Morpion implements MouseListener
                     return;
                 }
             }
+        }
+    }
+
+    public void actionPerformed(ActionEvent e)
+    {
+        if ( e.getSource() == this.btnChat )
+        {
+            String message = this.txtChat.getText().trim();
+            if ( message.isEmpty() ) return;
+            
+            this.logChat.append("Joueur " + this.monSigne + " : " + message + "\n");
+
+            this.txtChat.setText("");
         }
     }
 
