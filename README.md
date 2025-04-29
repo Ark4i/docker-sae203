@@ -1,64 +1,45 @@
-# Exemple Dockerfile – Création d'une image Docker
+# 🎮 Projet Morpion Multijoueur en Java avec Docker
 
-Ce projet est un exemple simple de **Dockerfile** associé à **GitHub** pour déployer un serveur web basé sur l'image officielle ```httpd```.
+## 📌 Objectifs
 
-## Prérequis
+- Créer un jeu de **Morpion** (Tic-Tac-Toe) multijoueur.
+- Implémenter une architecture client-serveur avec **sockets** en **Java**.
+- Utiliser **Docker** pour l'isolation des services (serveur et clients).
+- Gérer l'affichage graphique avec **Swing** ou version console selon besoin.
 
-- Assurez-vous que Docker est installé sur votre machine :
+---
+
+## 🧱 Architecture du Projet
+
+Le projet se compose de plusieurs composants principaux : un serveur, deux clients, et un environnement Docker pour exécuter le tout. Voici l'organisation des fichiers dans le projet :
+
+
+---
+
+## 🐳 Conteneurisation avec Docker
+
+1. **Serveur** : Gère les connexions des clients et assure la gestion du jeu (validation des coups, vérification de la victoire).
+2. **Clients** : Se connectent au serveur et jouent le jeu, en envoyant et recevant des coups.
+3. Le réseau privé Docker `morpion-net` permet la communication entre le serveur et les clients.
+
+---
+
+## 🕹️ Fonctionnement
+
+Le jeu se déroule de la manière suivante :
+
+1. **Le serveur** attend deux connexions de clients.
+2. **Les clients** se connectent au serveur et commencent à jouer en envoyant leurs mouvements.
+3. Le serveur valide les coups et les renvoie aux autres joueurs.
+4. L’interface graphique (Swing) affiche le **plateau de jeu** et les mises à jour en temps réel.
+
+---
+
+## 🚀 Commandes principales
+
+Voici les commandes nécessaires pour faire tourner le projet dans Docker :
+
+### 1. **Build de l'image Docker** :
+
 ```bash
-docker --version
-```
-
-## Instructions
-
-1. **Cloner le dépôt :**
-```bash
-git clone git@github.com:juanluck/exempleDockerfile.git
-```
-
-2. **Accéder au dossier du projet :**
-```bash
-cd exempleDockerfile
-```
-
-3. **Construire l'image Docker :**
-```bash
-docker build -t <nom-de-votre-image> .
-```
-*(Remplacez `<nom-de-votre-image>` par le nom que vous souhaitez donner à votre image.)*
-
-4. **Lancer un conteneur à partir de l'image :**
-```bash
-docker run -d -p 8080:80 <nom-de-votre-image>
-```
-
-5. **Vérifier que l'application fonctionne :**
-- Ouvrez votre navigateur et allez à l'adresse : [http://localhost:8080](http://localhost:8080)
-
-6. **Lister les conteneurs en cours d'exécution :**
-```bash
-docker ps
-```
-
-La sortie ressemblera à :
-```bash
-CONTAINER ID   IMAGE           COMMAND              CREATED          STATUS          PORTS                                   NAMES
-b8f8f406b03c   httpd-juanlu    "httpd-foreground"    30 minutes ago   Up 30 minutes   0.0.0.0:8080->80/tcp, :::8080->80/tcp   quirky_tesla
-```
-
-7. **Arrêter le conteneur :**
-```bash
-docker stop b8f8f406b03c
-```
-*(Vous pouvez aussi utiliser le **nom** du conteneur, par exemple `quirky_tesla`.)*
-
-8. **Supprimer le conteneur (optionnel) :**
-```bash
-docker rm b8f8f406b03c
-```
-
-## Remarque
-
-- Vous pouvez utiliser soit l'**ID** du conteneur, soit son **nom** pour exécuter les commandes Docker (comme `stop` et `rm`).
-
-
+docker build -t morpion .

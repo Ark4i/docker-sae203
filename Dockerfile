@@ -1,24 +1,14 @@
-FROM debian:latest
+# Use a base image with Java
+FROM openjdk:17
 
-# Installer Apache et le JDK
-RUN apt-get update && \
-    apt-get install -y apache2 openjdk-17-jdk && \
-    apt-get clean
-
-# Définir le répertoire de travail
+# Set working directory inside container
 WORKDIR /app
 
-# Copier uniquement les fichiers nécessaires
-COPY game/Morpion ./game/Morpion
-COPY html /var/www/html
+# Copy Morpion source code and resources into the container
+COPY game/Morpion /app
 
-# Compiler les fichiers Java utiles
-# Compiler les fichiers Java
-RUN javac -encoding UTF-8 ./game/Morpion/*.java || java ./game/Morpion/ServeurMorpion.java
+# Compile all Java files
+RUN javac *.java
 
-
-# Exposer le port pour Apache
-EXPOSE 80
-
-# Démarrer Apache
-CMD ["apachectl", "-D", "FOREGROUND"]
+# Set default command to run the server (can override for client)
+CMD ["java", "ServeurMorpion"]
