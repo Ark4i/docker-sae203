@@ -21,20 +21,20 @@ public class ClientMorpion
 
             if (role.equals("j1"))
             {
-                ctrl.setMySymbol('X');
-                ctrl.setTurn(true);
+                ctrl.setMonSigne('X');
+                ctrl.setTour(true);
             }
             else
             {
-                ctrl.setMySymbol('O');
-                ctrl.setTurn(false);
+                ctrl.setMonSigne('O');
+                ctrl.setTour(false);
             }
 
             while (true)
             {
                 if (ctrl.getAJoue())
                 {
-                    int move = ctrl.getInt();
+                    int move = ctrl.getDernierMouvement();
                     out.println(move);
                     ctrl.setAJoue(false);
                 }
@@ -46,7 +46,7 @@ public class ClientMorpion
                         if (msg == null) break;
                         int move = Integer.parseInt(msg);
                         ctrl.receiveMove(move);
-                        ctrl.setTurn(true);
+                        ctrl.setTour(true);
                     }
                     else { Thread.sleep(50); }
                 }

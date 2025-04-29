@@ -7,21 +7,21 @@ public class Morpion implements MouseListener
 {
     private JFrame     frame;
     private JPanel     panel;
-    private JLabel[][] grid;
-    private char  [][] board;
-    private boolean    myTurn;
-    private boolean    hasPlayed;
-    private int        lastMoveIndex;
-    private char       mySymbol;
-    private char       opponentSymbol;
+    private JLabel[][] tabLabel;
+    private char  [][] plateau;
+    private boolean    monTour;
+    private boolean    aJoue;
+    private int        dernierMouvement;
+    private char       monSigne;
+    private char       signeOpposant;
 
     public Morpion()
     {
-        this.board         = new char  [3][3];
-        this.grid          = new JLabel[3][3];
-        this.hasPlayed     = false;
-        this.lastMoveIndex = -1;
-        this.myTurn        = false;
+        this.plateau          = new char  [3][3];
+        this.tabLabel         = new JLabel[3][3];
+        this.aJoue            = false;
+        this.dernierMouvement = -1;
+        this.monTour          = false;
 
         this.frame = new JFrame("Morpion Multijoueur");
         this.panel = new JPanel(new GridLayout(3, 3, 10, 10));
@@ -31,10 +31,10 @@ public class Morpion implements MouseListener
         {
             for (int j = 0; j < 3; j++)
             {
-                this.board[i][j] = ' ';
-                this.grid [i][j] = new JLabel(new ImageIcon("./images/vide.png"));
-                this.grid [i][j].addMouseListener(this);
-                this.panel.add(grid[i][j]);
+                this.plateau [i][j] = ' ';
+                this.tabLabel[i][j] = new JLabel(new ImageIcon("./images/vide.png"));
+                this.tabLabel[i][j].addMouseListener(this);
+                this.panel.add(this.tabLabel[i][j]);
             }
         }
 
@@ -44,27 +44,27 @@ public class Morpion implements MouseListener
         this.frame.setVisible(true);
     }
 
-    public void setMySymbol(char symbol)
+    public void setMonSigne(char symbol)
     {
-        this.mySymbol       = symbol;
-        this.opponentSymbol = (symbol == 'X') ? 'O' : 'X';
+        this.monSigne      = symbol;
+        this.signeOpposant = (symbol == 'X') ? 'O' : 'X';
     }
 
-    public void    setTurn (boolean turn) { this.myTurn    = turn    ; }
-    public boolean getAJoue()             { return this.hasPlayed    ; }
-    public void    setAJoue(boolean b)    { this.hasPlayed = b       ; }
-    public int     getInt  ()             { return this.lastMoveIndex; }
-    public void    majIHM  ()             { this.panel.repaint()     ; }
+    public void    setTour             (boolean turn) {        this.monTour = turn  ; }
+    public boolean getAJoue            ()             { return this.aJoue           ; }
+    public void    setAJoue            (boolean b)    {        this.aJoue   = b     ; }
+    public int     getDernierMouvement ()             { return this.dernierMouvement; }
+    public void    majIHM              ()             {        this.panel.repaint() ; }
 
     public void    placerJeton(int index, char symbole)
     {
         int row = index / 3;
         int col = index % 3;
 
-        if (board[row][col] == ' ')
+        if (plateau[row][col] == ' ')
         {
-            this.board[row][col] = symbole;
-            this.grid [row][col].setIcon(new ImageIcon("./images/" + symbole + ".png"));
+            this.plateau [row][col] = symbole;
+            this.tabLabel[row][col].setIcon(new ImageIcon("./images/" + symbole + ".png"));
         }
     }
 
@@ -72,17 +72,17 @@ public class Morpion implements MouseListener
     {
         for (int i = 0; i < 3; i++)
         {
-            if (this.board[i][0] == symbole && this.board[i][1] == symbole && this.board[i][2] == symbole) return true;
-            if (this.board[0][i] == symbole && this.board[1][i] == symbole && this.board[2][i] == symbole) return true;
+            if (this.plateau[i][0] == symbole && this.plateau[i][1] == symbole && this.plateau[i][2] == symbole) return true;
+            if (this.plateau[0][i] == symbole && this.plateau[1][i] == symbole && this.plateau[2][i] == symbole) return true;
         }
-        if (this.board[0][0] == symbole && this.board[1][1] == symbole && this.board[2][2] == symbole) return true;
-        if (this.board[0][2] == symbole && this.board[1][1] == symbole && this.board[2][0] == symbole) return true;
+        if (this.plateau[0][0] == symbole && this.plateau[1][1] == symbole && this.plateau[2][2] == symbole) return true;
+        if (this.plateau[0][2] == symbole && this.plateau[1][1] == symbole && this.plateau[2][0] == symbole) return true;
         return false;
     }
 
-    private boolean isBoardFull()
+    private boolean plateauEstPlein()
     {
-        for (char[] row : this.board)
+        for (char[] row : this.plateau)
             for (char c : row)
                 if (c == ' ') return false;
         return true;
@@ -90,33 +90,33 @@ public class Morpion implements MouseListener
 
     public void mouseClicked(MouseEvent e)
     {
-        if (!this.myTurn) return;
+        if (!this.monTour) return;
 
         for (int i = 0; i < 3; i++)
         {
             for (int j = 0; j < 3; j++)
             {
-                if (e.getSource() == this.grid[i][j] && this.board[i][j] == ' ')
+                if (e.getSource() == this.tabLabel[i][j] && this.plateau[i][j] == ' ')
                 {
-                    this.placerJeton(i * 3 + j, this.mySymbol);
-                    this.lastMoveIndex = i * 3 + j;
-                    this.hasPlayed = true;
-                    this.myTurn = false;
-                    this.checkGameEnd(this.mySymbol);
+                    this.placerJeton(i * 3 + j, this.monSigne);
+                    this.dernierMouvement = i * 3 + j;
+                    this.aJoue            = true;
+                    this.monTour          = false;
+                    this.finJeu(this.monSigne);
                     return;
                 }
             }
         }
     }
 
-    private void checkGameEnd(char symbole)
+    private void finJeu(char symbole)
     {
-        if (aGagner(symbole))
+        if (this.aGagner(symbole))
         {
             JOptionPane.showMessageDialog(this.frame, "Le joueur '" + symbole + "' a gagné !");
             this.frame.dispose();
         }
-        else if (isBoardFull())
+        else if (this.plateauEstPlein())
         {
             JOptionPane.showMessageDialog(this.frame, "Match nul !");
             this.frame.dispose();
@@ -125,8 +125,8 @@ public class Morpion implements MouseListener
 
     public void receiveMove(int index)
     {
-        placerJeton (index, this.opponentSymbol);
-        checkGameEnd(       this.opponentSymbol);
+        this.placerJeton (index, this.signeOpposant);
+        this.finJeu      (       this.signeOpposant);
     }
 
     public void mouseEntered (MouseEvent e) {}
