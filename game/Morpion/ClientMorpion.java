@@ -3,7 +3,7 @@ import java.io.*;
 import java.net.*;
 
 public class ClientMorpion {
-    private static final int PORT = 5000;
+    private static final int PORT = 8080;
 
     public static void main(String[] args) {
         final String SERVER_ADDRESS = args[0];
