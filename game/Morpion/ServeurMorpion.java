@@ -23,21 +23,34 @@ public class ServeurMorpion
             out1.println("j1");
             out2.println("j2");
 
-            while (true)
+            // Thread pour relayer les messages de joueur1 à joueur2
+            new Thread(() ->
             {
-                String move1 = in1.readLine();
-                if (move1 == null) break;
-                out2.println(move1);
+                try
+                {
+                    while (true)
+                    {
+                        String msg = in1.readLine();
+                        if (msg == null) break;
+                        out2.println(msg);
+                    }
+                } catch (IOException e) { e.printStackTrace(); }
+            }).start();
 
-                String move2 = in2.readLine();
-                if (move2 == null) break;
-                out1.println(move2);
-
-                
-            }
-
-            joueur1.close();
-            joueur2.close();
+            // Thread pour relayer les messages de joueur2 à joueur1
+            new Thread(() ->
+            {
+                try
+                {
+                    while (true)
+                    {
+                        String msg = in2.readLine();
+                        if (msg == null) break;
+                        out1.println(msg);
+                    }
+                }
+                catch (IOException e) { e.printStackTrace(); }
+            }).start();
         }
         catch (IOException e) { e.printStackTrace(); }
     }

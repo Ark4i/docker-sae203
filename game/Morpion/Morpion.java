@@ -1,39 +1,47 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.PrintWriter;
+import java.net.Socket;
+
 import javax.swing.*;
 
 public class Morpion implements MouseListener , ActionListener
 {
     private static final String[] ENS_THEME = {"basique","espace","nourriture","planete"};
-    private int        cptTheme; 
+    private int         cptTheme; 
 
-    private JFrame     frame;
+    private JFrame      frame;
 
-    private JPanel     panelMorpion;
-    private JLabel[][] tabLabel;
-    private char  [][] plateau;
+    private JPanel      panelMorpion;
+    private JLabel[][]  tabLabel;
+    private char  [][]  plateau;
 
-    private JTextField txtChat;
-    private JTextArea  logChat;
-    private JButton    btnChat;
+    private JTextField  txtChat;
+    public  JTextArea   logChat;
+    private JButton     btnChat;
 
-    private boolean    monTour;
-    private boolean    aJoue;
-    private int        dernierMouvement;
-    private char       monSigne;
-    private char       signeOpposant;
+    private boolean     monTour;
+    private boolean     aJoue;
+    private int         dernierMouvement;
+    private char        monSigne;
+    private char        signeOpposant;
 
-    private JButton    btnTheme;
-    private JLabel     lblTheme;
+    private JButton     btnTheme;
+    private JLabel      lblTheme;
 
+    private Socket      socket;
+    private PrintWriter out;
 
-    public Morpion()
+    public Morpion(Socket socket, PrintWriter out)
     {
         /* ----------------------------- */
         /* ----------------------------- */
 		/*            METIER             */
 		/* ----------------------------- */
         /* ----------------------------- */
+        this.socket = socket;
+        this.out    = out;
+
         this.cptTheme         = 0;
         this.aJoue            = false;
         this.dernierMouvement = -1;
@@ -221,7 +229,10 @@ public class Morpion implements MouseListener , ActionListener
                     this.dernierMouvement = cptLig * 3 + cptCol;
                     this.aJoue            = true;
                     this.monTour          = false;
+
+                    this.out.println(this.dernierMouvement);
                     this.finJeu(this.monSigne);
+
                     return;
                 }
             }
@@ -234,9 +245,10 @@ public class Morpion implements MouseListener , ActionListener
             String message = this.txtChat.getText().trim();
             if ( message.isEmpty() ) return;
             
-            this.logChat.append("Joueur " + this.monSigne + " : " + message + "\n");
-
+            this.logChat.append("Vous : " + message + "\n");
             this.txtChat.setText("");
+
+            this.out.println("CHAT:Joueur " + this.monSigne + " : " + message);
         }
 
         if ( e.getSource() == this.btnTheme ) this.changerTheme();
@@ -251,7 +263,6 @@ public class Morpion implements MouseListener , ActionListener
                 viderPlateau();
                 this.majIHM();
             }
-            
             else {this.frame.dispose();}
         }
 
@@ -267,8 +278,4 @@ public class Morpion implements MouseListener , ActionListener
     public void mouseExited  (MouseEvent e) {}
     public void mousePressed (MouseEvent e) {}
     public void mouseReleased(MouseEvent e) {}
-
-    public static void main(String[] args) {
-        new Morpion();
-    }
 }

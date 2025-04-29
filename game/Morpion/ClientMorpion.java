@@ -17,7 +17,7 @@ public class ClientMorpion
 
             String  role = in.readLine();
             System.out.println("Vous êtes : " + role);
-            Morpion ctrl = new Morpion();
+            Morpion ctrl = new Morpion(socket, out);
 
             if (role.equals("j1"))
             {
@@ -30,6 +30,32 @@ public class ClientMorpion
                 ctrl.setTour(false);
             }
 
+            // Thread pour écouter les messages du serveur
+            new Thread(() ->
+            {
+                try
+                {
+                    while (true)
+                    {
+                        if (in.ready())
+                        {
+                            String msg = in.readLine();
+                            if (msg == null) break;
+                            if (msg.startsWith("CHAT:"))
+                                ctrl.logChat.append(msg.substring(5) + "\n");
+                            else
+                            {
+                                // Traiter le mouvement de jeu
+                                int move = Integer.parseInt(msg);
+                                ctrl.receiveMove(move);
+                                ctrl.setTour(true);
+                            }
+                        }
+                    }
+                } catch (IOException e) { e.printStackTrace(); }
+            }).start();
+
+            // Boucle principale pour envoyer les mouvements de jeu
             while (true)
             {
                 if (ctrl.getAJoue())
@@ -38,20 +64,7 @@ public class ClientMorpion
                     out.println(move);
                     ctrl.setAJoue(false);
                 }
-                else
-                {
-                    if (in.ready())
-                    {
-                        String msg = in.readLine();
-                        if (msg == null) break;
-                        int move = Integer.parseInt(msg);
-                        ctrl.receiveMove(move);
-                        ctrl.setTour(true);
-                    }
-                }
             }
-            socket.close();
-        }
-        catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) { e.printStackTrace(); }
     }
 }
