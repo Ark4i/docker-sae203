@@ -1,3 +1,4 @@
+
 # Exemple Dockerfile – Création d'une image Docker
 
 Ce projet est un exemple simple de **Dockerfile** associé à **GitHub** pour déployer un serveur web basé sur l'image officielle ```httpd```.
