@@ -118,6 +118,16 @@ public class Morpion implements MouseListener , ActionListener
         return true;
     }
 
+
+    private void viderPlateau() {
+        for (int i = 0; i < this.plateau.length; i++) {
+            for (int j = 0; j < this.plateau[i].length; j++) {
+                this.plateau[i][j] = ' ';  // Vide les données du plateau
+                this.tabLabel[i][j].setIcon(new ImageIcon("./images/vide.png")); // Vide l'affichage
+            }
+        }
+    }
+
     public void mouseClicked(MouseEvent e)
     {
         if (!this.monTour) return;
@@ -156,8 +166,14 @@ public class Morpion implements MouseListener , ActionListener
     {
         if (this.aGagner(symbole)||this.plateauEstPlein())
         {
-            JOptionPane.showConfirmDialog(this.frame, "Voulez vous rejouer ?", "Repondez svp", JOptionPane.YES_NO_OPTION);
-            this.frame.dispose();
+            if(JOptionPane.showConfirmDialog(this.frame, "Voulez vous rejouer ?", "Repondez svp", JOptionPane.YES_NO_OPTION) == 0)
+            {
+                viderPlateau();
+                this.majIHM();
+                
+            }
+            
+            else {this.frame.dispose();}
         }
 
     }
