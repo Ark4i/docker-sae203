@@ -5,83 +5,127 @@ import javax.swing.*;
 public class Morpion implements MouseListener , ActionListener
 {
     private static final String[] ENS_THEME = {"basique","espace","nourriture","planete"};
-
     private int        cptTheme; 
 
     private JFrame     frame;
+
     private JPanel     panelMorpion;
     private JLabel[][] tabLabel;
     private char  [][] plateau;
-    private JPanel     panelChat;
-    private JPanel     panelSend;
+
     private JTextField txtChat;
     private JTextArea  logChat;
     private JButton    btnChat;
+
     private boolean    monTour;
     private boolean    aJoue;
     private int        dernierMouvement;
     private char       monSigne;
     private char       signeOpposant;
+
     private JButton    btnTheme;
-    private JPanel     panelTheme;
 
 
     public Morpion()
     {
+        /* ----------------------------- */
+        /* ----------------------------- */
+		/*            METIER             */
+		/* ----------------------------- */
+        /* ----------------------------- */
         this.cptTheme         = 0;
-        this.plateau          = new char  [3][3];
-        this.tabLabel         = new JLabel[3][3];
         this.aJoue            = false;
         this.dernierMouvement = -1;
         this.monTour          = false;
 
-        this.frame = new JFrame("Morpion Multijoueur");
+        this.plateau          = new char [3][3];
+        for (int cptLig = 0; cptLig < this.plateau.length; cptLig++)
+            for (int cptCol = 0; cptCol < this.plateau[cptLig].length; cptCol++)
+                this.plateau[cptLig][cptCol] = ' ';
+        
+        /* ----------------------------- */
+        /* ----------------------------- */
+		/*              IHM              */
+		/* ----------------------------- */
+        /* ----------------------------- */
+
+        JPanel      panelSend, panelChat, panelTheme;
+        JScrollPane scrollPane;
+        
+        /* ----------------------------- */
+		/* Création des composants       */
+		/* ----------------------------- */
+        this.frame        = new JFrame("Morpion Multijoueur");
+
         this.panelMorpion = new JPanel(new GridLayout(3, 3, 10, 10));
         this.panelMorpion.setBackground(Color.BLACK);
 
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                this.plateau [i][j] = ' ';
-                this.tabLabel[i][j] = new JLabel(new ImageIcon("./images/vide.png"));
-                this.tabLabel[i][j].addMouseListener(this);
-                this.panelMorpion.add(this.tabLabel[i][j]);
-            }
-        }
+        this.tabLabel = new JLabel[this.plateau.length][this.plateau[0].length];
+        for (int cptLig = 0; cptLig < this.tabLabel.length; cptLig++)
+            for (int cptCol = 0; cptCol < this.tabLabel[cptLig].length; cptCol++)
+                this.tabLabel[cptLig][cptCol] = new JLabel(new ImageIcon("./images/vide.png"));
 
-        
-        
 
-        this.panelChat = new JPanel( new BorderLayout() );
-        this.frame.add(this.panelChat, BorderLayout.EAST);
-
-        this.panelSend = new JPanel();
-        this.panelChat.add(this.panelSend, BorderLayout.SOUTH);
+        panelChat = new JPanel( new BorderLayout() );
 
         this.logChat = new JTextArea();
         this.logChat.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(this.logChat);
+
+        scrollPane = new JScrollPane(this.logChat);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        this.panelChat.add(scrollPane, BorderLayout.CENTER);
+
+
+        panelSend = new JPanel();
 
         this.txtChat = new JTextField();
         this.txtChat.setPreferredSize(new Dimension(300, 30));
-        this.panelSend.add(this.txtChat);
-        this.btnChat = new JButton("Envoyer");
-        this.panelSend.add(this.btnChat);
-        this.btnChat.addActionListener(this);
 
-        this.frame.add(this.panelMorpion);
+        this.btnChat = new JButton("Envoyer");
+
+
+        panelTheme = new JPanel();
+
+        this.btnTheme = new JButton("Thème");
+
+		/* ----------------------------- */
+		/* Positionnement des composants */
+		/* ----------------------------- */
+
+        for (int cptLig = 0; cptLig < this.tabLabel.length; cptLig++)
+            for (int cptCol = 0; cptCol < this.tabLabel[cptLig].length; cptCol++)
+                this.panelMorpion.add(this.tabLabel[cptLig][cptCol]);
+
+
+        panelChat.add(  panelSend, BorderLayout.SOUTH  );
+        panelChat.add( scrollPane, BorderLayout.CENTER );
+
+
+        panelSend.add( this.txtChat );
+        panelSend.add( this.btnChat );
+
+
+        panelTheme.add( this.btnTheme );
+        panelChat.add( panelTheme, BorderLayout.NORTH );
+
+
+        this.frame.add(      panelChat   , BorderLayout.EAST   );
+        this.frame.add( this.panelMorpion, BorderLayout.CENTER );
+
         this.frame.pack();
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setVisible(true);
+		/* ------------------------------ */
+		/* Activation des composants      */
+		/* ------------------------------ */
 
-        this.panelTheme = new JPanel();
-        this.btnTheme   = new JButton("Thème");
+        for (JLabel[] ligne : this.tabLabel)
+            for (JLabel c : ligne)
+                c.addMouseListener(this);
+        
+        this.btnChat.addActionListener(this);
+
         this.btnTheme.addActionListener(this);
-        this.panelTheme.add( this.btnTheme );
-        this.panelChat.add( this.panelTheme, BorderLayout.NORTH );
+        
     }
 
     public void setMonSigne(char symbol)
@@ -90,42 +134,48 @@ public class Morpion implements MouseListener , ActionListener
         this.signeOpposant = (symbol == 'X') ? 'O' : 'X';
     }
 
-    public void    setTour             (boolean turn) {        this.monTour = turn  ; }
-    public boolean getAJoue            ()             { return this.aJoue           ; }
-    public void    setAJoue            (boolean b)    {        this.aJoue   = b     ; }
-    public int     getDernierMouvement ()             { return this.dernierMouvement; }
-    public void    majIHM              ()             {        this.panelMorpion.repaint() ; }
+    public void    setTour             (boolean turn) {        this.monTour = turn        ; }
+    public boolean getAJoue            ()             { return this.aJoue                 ; }
+    public void    setAJoue            (boolean b)    {        this.aJoue   = b           ; }
+    public int     getDernierMouvement ()             { return this.dernierMouvement      ; }
+    public void    majIHM              ()             {        this.panelMorpion.repaint(); }
 
     public void changerTheme() 
     {
-        this.cptTheme++;
-        if ( this.cptTheme > Morpion.ENS_THEME.length -1  ) this.cptTheme = 0;
-        for( int cptlig = 0; cptlig < this.tabLabel.length; cptlig++ )
-            for( int cptCol = 0; cptCol < this.tabLabel[cptlig].length; cptCol++ )
-                if ( this.plateau[cptlig][cptCol] != ' ' )
-                    this.tabLabel[cptlig][cptCol] = new JLabel( new ImageIcon("./images/" + Morpion.ENS_THEME[this.cptTheme] + "/" + this.plateau[cptlig][cptCol] + ".png") );
+        if ( this.cptTheme >= Morpion.ENS_THEME.length -1 ) this.cptTheme = 0;
+        else                                                this.cptTheme++;
 
+        for (int cptLig = 0; cptLig < this.plateau.length; cptLig++)
+            for (int cptCol = 0; cptCol < this.plateau[cptLig].length; cptCol++)
+            {
+                char symbole =      this.plateau [cptLig][cptCol];
+                if (symbole == ' ') this.tabLabel[cptLig][cptCol].setIcon(new ImageIcon("./images/vide.png"));
+                else                this.tabLabel[cptLig][cptCol].setIcon(new ImageIcon("./images/" + Morpion.ENS_THEME[this.cptTheme] + "/" + symbole + ".png"));
+            }
+        
+        this.majIHM();
     }
 
     public void placerJeton(int index, char symbole)
     {
-        int row = index / 3;
+        int lig = index / 3;
         int col = index % 3;
 
-        if (plateau[row][col] == ' ')
+        if (plateau[lig][col] == ' ')
         {
-            this.plateau [row][col] = symbole;
-            this.tabLabel[row][col].setIcon(new ImageIcon("./images/" + Morpion.ENS_THEME[this.cptTheme] + "/" + symbole + ".png"));
+            this.plateau [lig][col] = symbole;
+            this.tabLabel[lig][col].setIcon(new ImageIcon("./images/" + Morpion.ENS_THEME[this.cptTheme] + "/" + symbole + ".png"));
         }
     }
 
     public boolean aGagner(char symbole)
     {
-        for (int i = 0; i < 3; i++)
-        {
-            if (this.plateau[i][0] == symbole && this.plateau[i][1] == symbole && this.plateau[i][2] == symbole) return true;
-            if (this.plateau[0][i] == symbole && this.plateau[1][i] == symbole && this.plateau[2][i] == symbole) return true;
-        }
+        for (int lig = 0; lig < this.plateau.length; lig++)
+            if (this.plateau[lig][0] == symbole && this.plateau[lig][1] == symbole && this.plateau[lig][2] == symbole) return true;
+        
+        for (int col = 0; col < this.plateau[0].length; col++)
+            if (this.plateau[0][col] == symbole && this.plateau[1][col] == symbole && this.plateau[2][col] == symbole) return true;
+            
         if (this.plateau[0][0] == symbole && this.plateau[1][1] == symbole && this.plateau[2][2] == symbole) return true;
         if (this.plateau[0][2] == symbole && this.plateau[1][1] == symbole && this.plateau[2][0] == symbole) return true;
         return false;
@@ -133,41 +183,39 @@ public class Morpion implements MouseListener , ActionListener
 
     private boolean plateauEstPlein()
     {
-        for (char[] row : this.plateau)
-            for (char c : row)
+        for (char[] ligne : this.plateau)
+            for (char c : ligne )
                 if (c == ' ') return false;
         return true;
     }
 
-
-    private void viderPlateau() {
-        for (int i = 0; i < this.plateau.length; i++) {
-            for (int j = 0; j < this.plateau[i].length; j++) {
-                this.plateau[i][j] = ' ';  // Vide les données du plateau
-                this.tabLabel[i][j].setIcon(new ImageIcon("./images/vide.png")); // Vide l'affichage
+    private void viderPlateau()
+    {
+        for (int cptLig = 0; cptLig < this.plateau.length; cptLig++)
+            for (int cptCol = 0; cptCol < this.plateau[cptLig].length; cptCol++)
+            {
+                this.plateau [cptLig][cptCol] = ' ';
+                this.tabLabel[cptLig][cptCol].setIcon(new ImageIcon("./images/vide.png"));
             }
-        }
     }
 
     public void mouseClicked(MouseEvent e)
     {
         if (!this.monTour) return;
 
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 3; j++)
+        for (int cptLig = 0; cptLig < this.plateau.length; cptLig++)
+            for (int cptCol = 0; cptCol < this.plateau[cptLig].length; cptCol++)
             {
-                if (e.getSource() == this.tabLabel[i][j] && this.plateau[i][j] == ' ')
+                if (e.getSource() == this.tabLabel[cptLig][cptCol] && this.plateau[cptLig][cptCol] == ' ')
                 {
-                    this.placerJeton(i * 3 + j, this.monSigne);
-                    this.dernierMouvement = i * 3 + j;
+                    this.placerJeton(cptLig * 3 + cptCol, this.monSigne);
+                    this.dernierMouvement = cptLig * 3 + cptCol;
                     this.aJoue            = true;
                     this.monTour          = false;
                     this.finJeu(this.monSigne);
                     return;
                 }
             }
-        }
     }
 
     public void actionPerformed(ActionEvent e)
@@ -182,8 +230,7 @@ public class Morpion implements MouseListener , ActionListener
             this.txtChat.setText("");
         }
 
-        if ( e.getSource() == this.btnTheme )
-            this.changerTheme();
+        if ( e.getSource() == this.btnTheme ) this.changerTheme();
     }
 
     private void finJeu(char symbole)
@@ -194,7 +241,6 @@ public class Morpion implements MouseListener , ActionListener
             {
                 viderPlateau();
                 this.majIHM();
-                
             }
             
             else {this.frame.dispose();}

@@ -48,7 +48,6 @@ public class ClientMorpion
                         ctrl.receiveMove(move);
                         ctrl.setTour(true);
                     }
-                    else { Thread.sleep(50); }
                 }
             }
             socket.close();
