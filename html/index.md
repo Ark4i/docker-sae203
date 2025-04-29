@@ -42,4 +42,8 @@ Voici les commandes nécessaires pour faire tourner le projet dans Docker :
 ### 1. **Build de l'image Docker** :
 
 ```bash
+<<<<<<< HEAD
 docker build -t morpion .
+=======
+docker build -t morpion .
+>>>>>>> 71f721fda70cfd98ff521b27ebb00e8f2f0aca1f
