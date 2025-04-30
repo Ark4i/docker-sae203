@@ -308,16 +308,46 @@ public class Morpion implements MouseListener , ActionListener
 
     private void finJeu(char symbole)
     {
-        if (this.aGagner(symbole)||this.plateauEstPlein())
+        String    message      = "";
+        ImageIcon imageFinGame = null;
+
+        if ( symbole == this.monSigne )
         {
-            if(JOptionPane.showConfirmDialog(this.frame, "Voulez vous rejouer ?", "Repondez svp", JOptionPane.YES_NO_OPTION) == 0)
+            if      ( this.aGagner        (symbole) )
+            {
+                message      = "Vous avez gagné";
+                imageFinGame = new ImageIcon( "./images/victoire.png" );
+            }
+            else if ( this.plateauEstPlein()        )
+            {
+                message      = "Match null";
+                imageFinGame = new ImageIcon( "./images/null.png" );
+            }
+        }
+        if ( symbole == this.signeOpposant )
+        {
+            if      ( this.aGagner        (symbole) )
+            {
+                message      = "Vous avez perdu";
+                imageFinGame = new ImageIcon( "./images/defaite.png" );
+            }
+            else if ( this.plateauEstPlein()        )
+            {
+                message      = "Match null";
+                imageFinGame = new ImageIcon( "./images/null.png" );
+            }
+        }
+
+        if ( this.aGagner(symbole) || this.plateauEstPlein() )
+        {
+            if(JOptionPane.showConfirmDialog(this.frame, message + "\nVoulez vous rejouer ?", "Repondez svp",
+               JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, imageFinGame ) == 0)
             {
                 viderPlateau();
                 this.majIHM();
             }
             else {this.frame.dispose();}
         }
-
     }
 
     public void receiveMove(int index)
