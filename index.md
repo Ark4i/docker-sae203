@@ -15,6 +15,9 @@
 
 ### Qu'est-ce que Git ?
 
+![image](https://github.com/user-attachments/assets/1de1867e-1a12-461b-9519-9c717636c797)
+
+
 **Git** est un système de gestion de versions **décentralisé** utilisé pour suivre les modifications apportées à un projet au fil du temps. Il permet :
 
 - De sauvegarder **l’historique complet** du code source.
@@ -62,6 +65,9 @@ Ces TP nous ont apporté une compréhension pratique de Git, essentielle pour g�
 ## Introduction à Docker
 
 ### Qu’est-ce que Docker ?
+
+![image](https://github.com/user-attachments/assets/3d61f9ba-67da-4824-8674-994febfc0c91)
+
 
 **Docker** est un outil de **virtualisation légère** qui permet de créer des **conteneurs**, c’est-à-dire des environnements isolés contenant tout ce qui est nécessaire pour faire fonctionner une application : le code, les bibliothèques, les dépendances, etc.
 
