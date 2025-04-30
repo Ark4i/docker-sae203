@@ -26,6 +26,7 @@ public class Morpion implements MouseListener , ActionListener
     private char        monSigne;
     private char        signeOpposant;
 
+    private JLabel      lblScore;
     private JButton     btnTheme;
     private JLabel      lblTheme;
     private JCheckBox   cbTheme;
@@ -82,26 +83,23 @@ public class Morpion implements MouseListener , ActionListener
 
         this.logChat = new JTextArea();
         this.logChat.setEditable(false);
-
-        scrollPane = new JScrollPane(this.logChat);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane   = new JScrollPane(this.logChat);
+        scrollPane  .setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
 
         panelSend = new JPanel();
 
         this.txtChat = new JTextField();
         this.txtChat.setPreferredSize(new Dimension(300, 30));
-
         this.btnChat = new JButton("Envoyer");
 
 
         panelTheme = new JPanel();
 
+        this.lblScore = new JLabel("Scores : 0 / 0");
         this.btnTheme = new JButton("Thème");
-
         this.lblTheme = new JLabel();
-
-        this.cbTheme = new JCheckBox("Sombre/Clair");
+        this.cbTheme  = new JCheckBox("Sombre/Clair");
 
 		/* ----------------------------- */
 		/* Positionnement des composants */
@@ -127,7 +125,8 @@ public class Morpion implements MouseListener , ActionListener
         panelChat.add( scrollPane, BorderLayout.CENTER );
         panelChat.setOpaque(false);
 
-
+        panelTheme.add( this.lblScore );
+        this.lblScore.setOpaque(false);
         panelTheme.add( this.btnTheme );
         panelTheme.add( this.lblTheme );
         panelTheme.add( this.cbTheme  );
@@ -279,26 +278,30 @@ public class Morpion implements MouseListener , ActionListener
         {
             if ( this.frame.getContentPane().getBackground().equals(Color.WHITE) )
             {
-                this.panelMorpion.setBackground(Color.WHITE);
+                this.panelMorpion          .setBackground(Color.WHITE);
                 this.frame.getContentPane().setBackground(Color.BLACK);
-                this.txtChat.setBackground(Color.BLACK);
-                this.txtChat.setForeground(Color.WHITE);
-                this.cbTheme.setForeground(Color.WHITE);
-                this.logChat.setBackground(Color.BLACK);
-                this.logChat.setForeground(Color.WHITE);
+                this.txtChat               .setBackground(Color.BLACK);
+                this.txtChat               .setForeground(Color.WHITE);
+                this.cbTheme               .setForeground(Color.WHITE);
+                this.logChat               .setBackground(Color.BLACK);
+                this.logChat               .setForeground(Color.WHITE);
+                this.lblScore              .setBackground(Color.BLACK);
+                this.lblScore              .setForeground(Color.WHITE);
 
                 this.sombre = true;
                 this.majIHM();
             }
             else
             {
-                this.panelMorpion.setBackground(Color.BLACK);
+                this.panelMorpion          .setBackground(Color.BLACK);
                 this.frame.getContentPane().setBackground(Color.WHITE);
-                this.txtChat.setBackground(Color.WHITE);
-                this.txtChat.setForeground(Color.BLACK);
-                this.cbTheme.setForeground(Color.BLACK);
-                this.logChat.setBackground(Color.WHITE);
-                this.logChat.setForeground(Color.BLACK);
+                this.txtChat               .setBackground(Color.WHITE);
+                this.txtChat               .setForeground(Color.BLACK);
+                this.cbTheme               .setForeground(Color.BLACK);
+                this.logChat               .setBackground(Color.WHITE);
+                this.logChat               .setForeground(Color.BLACK);
+                this.lblScore              .setBackground(Color.WHITE);
+                this.lblScore              .setForeground(Color.BLACK);
 
                 this.sombre = false;
                 this.majIHM();
@@ -311,14 +314,19 @@ public class Morpion implements MouseListener , ActionListener
         String    message      = "";
         ImageIcon imageFinGame = null;
 
+        String[] scores = this.lblScore.getText().replace("Scores : ", "").split(" / ");
+        int scoreMoi     = Integer.parseInt(scores[0].trim());
+        int scoreAdverse = Integer.parseInt(scores[1].trim());
+
         if ( symbole == this.monSigne )
         {
-            if      ( this.aGagner        (symbole) )
+            if ( this.aGagner (symbole) )
             {
                 message      = "Vous avez gagné";
                 imageFinGame = new ImageIcon( "./images/victoire.png" );
+                scoreMoi++;
             }
-            else if ( this.plateauEstPlein()        )
+            else if ( this.plateauEstPlein() )
             {
                 message      = "Match null";
                 imageFinGame = new ImageIcon( "./images/null.png" );
@@ -326,12 +334,13 @@ public class Morpion implements MouseListener , ActionListener
         }
         if ( symbole == this.signeOpposant )
         {
-            if      ( this.aGagner        (symbole) )
+            if ( this.aGagner (symbole) )
             {
                 message      = "Vous avez perdu";
                 imageFinGame = new ImageIcon( "./images/defaite.png" );
+                scoreAdverse++;
             }
-            else if ( this.plateauEstPlein()        )
+            else if ( this.plateauEstPlein() )
             {
                 message      = "Match null";
                 imageFinGame = new ImageIcon( "./images/null.png" );
@@ -340,6 +349,8 @@ public class Morpion implements MouseListener , ActionListener
 
         if ( this.aGagner(symbole) || this.plateauEstPlein() )
         {
+            this.lblScore.setText("Scores : " + scoreMoi + " / " + scoreAdverse);
+            
             if(JOptionPane.showConfirmDialog(this.frame, message + "\nVoulez vous rejouer ?", "Repondez svp",
                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, imageFinGame ) == 0)
             {
