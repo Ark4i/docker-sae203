@@ -1,45 +1,90 @@
-# 🎮 Projet Morpion Multijoueur en Java avec Docker
+# Morpion Multijoueur
 
-## 📌 Objectifs
-
-- Créer un jeu de **Morpion** (Tic-Tac-Toe) multijoueur.
-- Implémenter une architecture client-serveur avec **sockets** en **Java**.
-- Utiliser **Docker** pour l'isolation des services (serveur et clients).
-- Gérer l'affichage graphique avec **Swing** ou version console selon besoin.
+Application multijoueur du jeu de Morpion (Tic-Tac-Toe) implémentée en Java avec une architecture client-serveur et déployée via Docker.
 
 ---
 
-## 🧱 Architecture du Projet
+## À Propos
 
-Le projet se compose de plusieurs composants principaux : un serveur, deux clients, et un environnement Docker pour exécuter le tout. Voici l'organisation des fichiers dans le projet :
-
-
----
-
-## 🐳 Conteneurisation avec Docker
-
-1. **Serveur** : Gère les connexions des clients et assure la gestion du jeu (validation des coups, vérification de la victoire).
-2. **Clients** : Se connectent au serveur et jouent le jeu, en envoyant et recevant des coups.
-3. Le réseau privé Docker `morpion-net` permet la communication entre le serveur et les clients.
+Ce projet propose une implémentation complète du jeu de Morpion permettant à deux joueurs de s'affronter en temps réel. L'application utilise une architecture client-serveur robuste basée sur des sockets Java, avec Docker pour assurer une isolation et un déploiement faciles.
 
 ---
 
-## 🕹️ Fonctionnement
+## Caractéristiques
 
-Le jeu se déroule de la manière suivante :
-
-1. **Le serveur** attend deux connexions de clients.
-2. **Les clients** se connectent au serveur et commencent à jouer en envoyant leurs mouvements.
-3. Le serveur valide les coups et les renvoie aux autres joueurs.
-4. L’interface graphique (Swing) affiche le **plateau de jeu** et les mises à jour en temps réel.
+- **Architecture Client-Serveur** : Communication par sockets Java en temps réel
+- **Containerisation Docker** : Déploiement facile et isolation des services
+- **Interface Graphique** : Interface utilisateur intuitive avec Swing
+- **Thèmes Disponibles** : Mode clair et mode sombre avec plusieurs variantes visuelles
+- **Gestion du Jeu** : Validation des coups et détection automatique des victoires/égalités
 
 ---
 
-## 🚀 Commandes principales
+## Structure du Projet
 
-Voici les commandes nécessaires pour faire tourner le projet dans Docker :
+```
+.
+├── Dockerfile                    # Configuration de conteneurisation
+├── README.md                     # Documentation
+├── game/
+│   └── Morpion/                 # Composants principaux
+│       ├── ServeurMorpion.java  # Serveur de jeu
+│       ├── ClientMorpion.java   # Client du jeu
+│       ├── Morpion.java         # Logique principale
+│       └── images/              # Ressources graphiques
+│           ├── clair/           # Thème clair
+│           └── sombre/          # Thème sombre
+├── screens/                     # Captures d'écran du projet
+└── html/                        # Ressources additionnelles
+```
 
-### 1. **Build de l'image Docker** :
+---
+
+## Installation et Démarrage
+
+### Prérequis
+
+- Docker installé sur votre système
+- Docker Compose (optionnel)
+
+### Étapes de démarrage
+
+1. **Construire l'image Docker** :
 
 ```bash
 docker build -t morpion .
+```
+
+---
+
+## Fonctionnement
+
+### Cycle de jeu
+
+1. Le serveur attend la connexion de deux clients
+2. Les clients se connectent et le plateau s'affiche
+3. Les joueurs jouent à tour de rôle en cliquant sur les cases
+4. Le serveur valide chaque coup et l'envoie aux deux clients
+5. La partie se termine lorsqu'un joueur gagne ou en cas d'égalité
+
+### Communication Client-Serveur
+
+- Les clients envoient les coordonnées du coup joué au serveur
+- Le serveur valide le coup et met à jour le plateau
+- Les mises à jour sont envoyées aux deux clients en temps réel
+
+---
+
+## Captures d'Écran
+
+![Aperçu du jeu](./screens/morpion.png)
+---
+
+## Technologie
+
+- **Langage** : Java
+- **Interface Graphique** : Swing
+- **Communication** : Sockets TCP/IP
+- **Containerisation** : Docker
+- **Architecture** : Client-Serveur
+
